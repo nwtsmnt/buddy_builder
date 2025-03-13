@@ -1,0 +1,72 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Profile - Study Buddies
+    link(rel="stylesheet", href="/styles.css")
+  body
+    header
+      h1 Study Buddies
+      nav
+        ul
+          li
+            button.bg-blue-500.text-white.px-4.py-2 Button
+          li
+            button.bg-blue-500.text-white.px-4.py-2 Button
+          li
+            button.bg-blue-500.text-white.px-4.py-2 Button
+          li
+            input(type="text" placeholder="Search")
+          li
+            button.bg-blue-500.text-white.px-4.py-2 Button
+    hr
+    main
+      .container
+        .left-side
+          .details
+            h2 Details
+            ul
+              li Detail 1
+              li Detail 2
+              li Detail 3
+              li Detail 4
+              li Detail 5
+              li Detail 6
+              li Detail 7
+        .center
+          .cover-picture
+            img(src="/path/to/cover-picture.jpg", alt="Cover Picture")
+          .profile
+            img(src="/path/to/profile-picture.jpg", alt="Profile Picture")
+            h2 Name
+            p This is Bio ...
+          .posts
+            h3 Posts
+            each post in posts
+              .post
+                img(src=post.image, alt="Post Image")
+                p= post.name
+                p= post.time
+                p= post.content
+        .right-side
+          .interested
+            h2 Interested In
+            ul
+              li Interest 1
+              li Interest 2
+              li Interest 3
+              li Interest 4
+              li Interest 5
+              li Interest 6
+              li Interest 7
+          .skills
+            h2 Skills
+            ul
+              li Skill 1
+              li Skill 2
+              li Skill 3
+              li Skill 4
+              li Skill 5
+              li Skill 6
+              li Skill 7
