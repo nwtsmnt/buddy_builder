@@ -42,7 +42,7 @@ header p {
 nav ul {
     list-style: none;
     display: flex;
-    gap: 20px;
+    gap: 10px;
     margin: 0;
     padding: 0;
 }
@@ -65,14 +65,18 @@ nav ul li input {
     font-size: 1em;
 }
 
+nav ul li button,
+nav ul li input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
 nav ul li button {
     background-color: #007BFF;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
     transition: background-color 0.3s ease;
 }
 
@@ -83,7 +87,7 @@ nav ul li button:hover {
 hr {
     width: 100%;
     border: 1px solid #ccc;
-    margin: 20px 0;
+    margin: 0;
 }
 
 main {
@@ -119,7 +123,7 @@ main {
     color: #007BFF;
 }
 
-post-header p {
+.post-header p {
     margin: 0;
     color: #333;
 }
@@ -163,7 +167,7 @@ post-header p {
     transition: background-color 0.3s ease;
 }
 
-post-footer button:hover {
+.post-footer button:hover {
     background-color: #0056b3;
 }
 
@@ -204,6 +208,118 @@ post-footer button:hover {
 
 .groups ul li button:hover {
     background-color: #0056b3;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+}
+
+.details,
+.profile,
+.interested,
+.skills {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+}
+
+.details ul,
+.interested ul,
+.skills ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.details ul li,
+.interested ul li,
+.skills ul li {
+    margin-bottom: 10px;
+}
+
+.profile {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.profile h2 {
+    margin: 0;
+    font-size: 2em;
+    color: #007BFF;
+}
+
+.profile p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.profile .posts {
+    width: 100%;
+}
+
+.profile .posts .post {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.profile .posts .post img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.profile .posts .post p {
+    margin: 5px 0;
+}
+
+.right-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.right-side .interested,
+.right-side .skills {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.right-side ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+right-side ul li {
+    margin-bottom: 10px;
 }
 
 input {
@@ -301,4 +417,97 @@ footer {
     width: 100%;
     position: fixed;
     bottom: 0;
+}
+
+.left-side,
+.center,
+.right-side {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.left-side {
+    flex: 1;
+}
+
+.center {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cover-picture img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.profile img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.profile h2 {
+    margin: 0;
+    font-size: 2em;
+    color: #007BFF;
+}
+
+.profile p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.profile .posts {
+    width: 100%;
+}
+
+.profile .posts .post {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.profile .posts .post img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.profile .posts .post p {
+    margin: 5px 0;
+}
+
+.right-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.right-side .interested,
+.right-side .skills {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.right-side ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.right-side ul li {
+    margin-bottom: 10px;
 }
