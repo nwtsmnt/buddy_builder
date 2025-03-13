@@ -3,36 +3,69 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title Study Buddies - Home
-    link(rel="stylesheet", href="/styles.css")
-  body
-    .overlay
-      header
-        h1 Buddy Builder
-        nav
-          ul
-            li
-              a(href="/home") Study Buddies
-            li
-              input(type="text" placeholder="Search")
-              button Search
-      hr
-      main
-        .posts
+    title Study Buddies
+    script(src="https://cdn.tailwindcss.com")
+  body.bg-gray-100.p-4(style="background-image: url('background.jpg'); background-size: cover;")
+    .max-w-6xl.mx-auto.bg-white.shadow-lg
+      // Header
+      header.flex.items-center.p-4.bg-gray-200.border-b
+        h1.text-2xl.font-bold.italic Study Buddies
+        nav.ml-auto.flex.gap-2
+          button.bg-blue-500.text-white.px-4.py-2(onclick="alert('Button clicked!')") Button
+          button.bg-blue-500.text-white.px-4.py-2(onclick="alert('Button clicked!')") Button
+          button.bg-blue-500.text-white.px-4.py-2(onclick="alert('Button clicked!')") Button
+          input.border.px-4.py-2(placeholder="Search")
+          button.bg-blue-500.text-white.px-4.py-2(onclick="alert('Button clicked!')") Button
+
+      // Banner Section
+      .relative.bg-gray-300.h-40.flex.justify-center.items-center
+        .w-24.h-24.bg-white.border.rounded-full
+
+      // Main Content
+      .grid.grid-cols-4.gap-4.p-4
+        // Left Sidebar
+        aside.col-span-1.bg-gray-100.p-4
+          h2.font-bold Details
+          ul.space-y-2.mt-2
+            li Detail 1: 
+            li Detail 2: 
+            li Detail 3: 
+            li Detail 4: 
+          button.bg-blue-500.text-white.px-4.py-2.mt-2(onclick="alert('Edit Details clicked!')") Edit Details
+
+        // Center Content
+        main.col-span-2
+          h2.text-xl.font-bold.text-center Maruf
+          form(action="/post-bio" method="POST")
+            textarea.bg-gray-200.p-2.mt-2(name="bio" placeholder="Write your bio here...") This is Bio...
+            button.bg-blue-500.text-white.px-4.py-2.mt-2(type="submit") Post Bio
+          h3.mt-4.font-bold.italic Posts
           each post in posts
-            .post
-              .post-header
-                h2= post.title
-                p= post.name
-              .post-content
-                img(src=post.image, alt="Post Image")
-                p= post.content
-              .post-footer
-                p Posted by: #{post.username}
-                button Comments
-        .groups
-          h2 Groups
-          ul
-            each group in groups
-              li
-                button= group.name
+            .border.p-4.mt-2
+              .flex.gap-2
+                .w-8.h-8.bg-gray-400
+                div
+                  a(href="/home", class="font-bold text-blue-500") Maruf
+                  p.text-sm.text-gray-500= post.time
+              p.mt-2.bg-gray-300.h-6
+              p.mt-1.bg-gray-300.h-6.w-3/4
+              .mt-4.h-32.bg-gray-400
+
+        // Right Sidebar
+        aside.col-span-1
+          .bg-gray-100.p-4
+            h2.font-bold Interested In
+            ul.space-y-2.mt-2
+              li Interest 1: 
+              li Interest 2: 
+              li Interest 3: 
+              li Interest 4: 
+            button.bg-blue-500.text-white.px-4.py-2.mt-2(onclick="alert('Edit Interested In clicked!')") Edit Interested In
+          .bg-gray-100.p-4.mt-4
+            h2.font-bold Skills
+            ul.space-y-2.mt-2
+              li Skill 1: 
+              li Skill 2: 
+              li Skill 3: 
+              li Skill 4: 
+            button.bg-blue-500.text-white.px-4.py-2.mt-2(onclick="alert('Edit Skills clicked!')") Edit Skills
