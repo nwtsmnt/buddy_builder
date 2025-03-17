@@ -1,0 +1,20 @@
+extends layout
+
+block head
+  link(rel="stylesheet", href="/css/styles.css")
+
+block content
+  .overlay
+    header
+      h1 Buddy Builder
+      p Empowering Students, Together.
+    main
+      section#about-us
+        h2 About Us
+        p Buddy Builder is a collaborative platform designed to connect students with study buddies, share resources, and excel in academics. Whether you're prepping for exams, working on projects, or just looking for peer support, Buddy Builder has got your back!
+      section#cta
+        h2 Login & Sign-Up
+        p Prompt for new users to register or existing users to log in.
+        .buttons
+          a.cta-button(href='/auth/login') Log In
+          a.cta-button(href='/auth/signup') Sign Up

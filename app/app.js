@@ -1,48 +1,27 @@
-// Import express.js
 const express = require("express");
+const app = express();
+const authRoutes = require("./routes/auth_routes");
+const postRoutes = require("./routes/post_routes");
+const aboutRoutes = require("./routes/about_routes");
+const introRoutes = require("./routes/intro_routes");
 
-// Create express app
-var app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Add static files location
-app.use(express.static("static"));
+// Serve static files like CSS
+app.use(express.static("./app/public"));
 
-// Get the functions in the db.js file to use
-const db = require('./services/db');
+// Set view engine
+app.set("view engine", "pug");
+app.set("views", "./app/views");
 
-// Create a route for root - /
-app.get("/", function(req, res) {
-    res.send("Hello world!");
-});
+// Use Routes
+app.use("/auth", authRoutes);
+app.use("/", postRoutes);
+app.use("/", aboutRoutes);
+app.use("/", introRoutes);
 
-// Create a route for testing the db
-app.get("/db_test", function(req, res) {
-    // Assumes a table called test_table exists in your database
-    sql = 'select * from test_table';
-    db.query(sql).then(results => {
-        console.log(results);
-        res.send(results)
-    });
-});
-
-// Create a route for /goodbye
-// Responds to a 'GET' request
-app.get("/goodbye", function(req, res) {
-    res.send("Goodbye world!");
-});
-
-// Create a dynamic route for /hello/<name>, where name is any value provided by user
-// At the end of the URL
-// Responds to a 'GET' request
-app.get("/hello/:name", function(req, res) {
-    // req.params contains any parameters in the request
-    // We can examine it in the console for debugging purposes
-    console.log(req.params);
-    //  Retrieve the 'name' parameter and use it in a dynamically generated page
-    res.send("Hello " + req.params.name);
-});
-
-// Start server on port 3000
-app.listen(3000,function(){
-    console.log(`Server running at http://127.0.0.1:3000/`);
+// Start server
+app.listen(3000, () => {
+    console.log("Server running on http://127.0.0.1:3000");
 });
