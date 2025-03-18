@@ -4,6 +4,7 @@ const authRoutes = require("./routes/auth_routes");
 const postRoutes = require("./routes/post_routes");
 const aboutRoutes = require("./routes/about_routes");
 const introRoutes = require("./routes/intro_routes");
+const profileRoutes = require("./routes/profile_routes");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,6 +21,7 @@ app.use("/auth", authRoutes);
 app.use("/", postRoutes);
 app.use("/", aboutRoutes);
 app.use("/", introRoutes);
+app.use("/", profileRoutes);
 
 // Start server
 app.listen(3000, () => {

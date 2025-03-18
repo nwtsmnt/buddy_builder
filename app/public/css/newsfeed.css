@@ -1,13 +1,31 @@
 /* General Page Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f8fa;
+    background: url('/images/intro.jpg') no-repeat center center/cover;
     color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
 }
 
-/* Container */
+/* Overlay Background */
+.overlay {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 80%;
+    max-width: 800px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Main Container */
 .container {
     display: flex;
     margin: 0 auto;
@@ -17,13 +35,13 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
-/* Sidebar Navigation */
+/* Left Sidebar */
 .left-sidebar {
     width: 200px;
     min-width: 200px;
-    background-color: white;
-    border-right: 1px solid #ddd;
-    padding: 20px 0;
+    background-color: rgba(248, 248, 248, 0.899);
+    padding-top: 150px;
+    border-right: 3px solid #0c0909;
 }
 
 .nav-button {
@@ -31,8 +49,9 @@ body {
     background-color: #3b5998;
     color: white;
     text-align: center;
-    padding: 12px;
+    padding: 20px;
     margin: 10px 15px;
+    margin-bottom: 50px;
     text-decoration: none;
     transition: background-color 0.2s;
     font-weight: bold;
@@ -44,20 +63,17 @@ body {
     background-color: #2d4373;
 }
 
-/* Main Content Area */
-.main-area {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
+/* Header */
 .header {
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
-    background-color: white;
+    width: 100%;
+    padding: 0px;
+    text-align: left;
+    background-color: rgba(248, 248, 248, 0.899);
+    position: relative;
     display: flex;
+    z-index: 1000;
     align-items: center;
+    border-bottom: 3px solid #090606;
 }
 
 .logo {
@@ -67,7 +83,9 @@ body {
 }
 
 .logo-icon {
-    border: 1px solid #3b5998;
+    width: 50px;
+    height: auto;
+    border: none;
     color: #3b5998;
     padding: 8px;
     margin-right: 10px;
@@ -76,8 +94,8 @@ body {
 /* Search Bar */
 .search-bar {
     display: flex;
-    width: 400px;
-    margin-left: 50px;
+    width: 500px;
+    margin-left: 150px;
 }
 
 .search-input {
@@ -91,12 +109,27 @@ body {
     background-color: #3b5998;
     color: white;
     border: none;
-    padding: 8px 15px;
+    padding: 8px 25px;
     border-radius: 0 4px 4px 0;
     cursor: pointer;
 }
 
-/* Post Section */
+/* Content Area */
+.content-area {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+
+/* Post Styling */
 .post {
     padding: 15px;
     border-bottom: 1px solid #ddd;
@@ -107,90 +140,134 @@ body {
     color: #3b5998;
 }
 
+/* Post Content */
 .post-content {
-    border: 1px solid #ddd;
-    height: 130px;
-    margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
     background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 600px;
+    margin: auto;
 }
 
-/* Post Header */
-.post-header {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
+/* Post Image */
+.post-content img {
+    width: 80%;
+    max-width: 300px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
-.post-author {
-    font-weight: bold;
-    color: #3b5998;
+.post-text {
+    flex: 1;
 }
 
-.post-time {
-    color: #777;
-}
-
-.post-description {
-    margin: 10px 0;
-    color: #444;
-}
-
-/* Comments */
-.post-comments {
-    margin-top: 15px;
-    border-top: 1px dashed #ccc;
-    padding-top: 10px;
-}
-
-.comments-title {
-    font-size: 14px;
-    color: #3b5998;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.comment-line {
-    background-color: #e9ebf5;
-    margin: 8px 0;
-    border-radius: 5px;
-    padding: 10px;
-    border-left: 4px solid #3b5998;
-}
-
-/* Groups Sidebar */
+/* Right Sidebar (Groups Sidebar) - Make it look like Left Sidebar */
 .groups-sidebar {
     width: 200px;
     min-width: 200px;
-    padding: 15px;
-    background-color: white;
-    overflow-y: auto;
+    padding: 100px 0;
+    padding-top: 150px;
+    background-color: rgba(248, 248, 248, 0.899); /* Same as left sidebar */
+    border-left: 3px solid #0c0909;
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center the buttons */
 }
 
+/* Title Styling */
 .groups-title {
     text-align: center;
     font-size: 20px;
-    margin: 0 0 15px 0;
-    color: #3b5998;
+    margin-bottom: 30px;
+    color: rgb(0, 0, 0);
     font-weight: bold;
 }
 
-/* Buttons */
+/* Group Buttons - Same as Left Sidebar Buttons */
 .group-button {
     display: block;
     background-color: #3b5998;
     color: white;
     text-align: center;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 20px;
+    margin: 10px 15px;
+    margin-bottom: 50px;
     text-decoration: none;
-    border-radius: 4px;
     transition: background-color 0.2s;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    width: 80%;
 }
 
 .group-button:hover {
     background-color: #2d4373;
+}
+
+.group-button:hover {
+    background-color: #2d4373;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .left-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 3px solid #0c0909;
+        padding-top: 50px;
+    }
+
+    .groups-sidebar {
+        width: 100%;
+        border-left: none;
+        border-top: 3px solid #0c0909;
+        padding-top: 20px;
+    }
 }
