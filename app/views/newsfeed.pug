@@ -2,51 +2,96 @@ doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title Study Buddies
-    link(rel="stylesheet", href="/css/newsfeed.css")  
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Study Buddies - Newsfeed
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
+    link(rel="stylesheet", href="/css/newsfeed.css")
+
   body
-    .container
-      .left-sidebar
-        a.nav-button(href="/profile") My Profile
-        a.nav-button(href="/chat") Chats
-        a.nav-button(href="/add-post") Add Post
-        a.nav-button(href="/about-us") About Us
-        a.nav-button(href="/logout") Log-Out
-      
-      .main-area
-        .header
-          .logo
-            img.logo-icon(src="/images/logo.jpeg" alt="Study Buddies Logo")
-            h2 Study Buddies
-          .search-bar
+    .app-container
+      nav.sidebar
+        .logo
+          i.fas.fa-graduation-cap
+          span Study Buddies
+        .nav-links
+          a.nav-link(href="/profile")
+            i.fas.fa-user
+            span My Profile
+          a.nav-link(href="/chat")
+            i.fas.fa-comments
+            span Chats
+          a.nav-link(href="/add_post")
+            i.fas.fa-plus-circle
+            span Add Post
+          a.nav-link(href="/about-us")
+            i.fas.fa-info-circle
+            span About Us
+          a.nav-link(href="/logout")
+            i.fas.fa-sign-out-alt
+            span Log Out
+
+      .main-content
+        header.top-bar
+          .search-container
+            i.fas.fa-search
             input.search-input(type="text" placeholder="Search...")
-            button.search-button Search
-        
+          .user-menu
+            .notifications
+            .profile-menu
+              img.avatar(src="/images/avatars/Boris.jpg" alt="Profile")
+              span.username 
+
         .content-area
-          .main-content
+          .page-header
+            h1.page-title 
+              i.fas.fa-newspaper
+              | Newsfeed
+
+          .posts-container
             if posts && posts.length
               each post in posts
-                .post
-                  h3.post-title #{post.title}
+                .post-card
+                  .post-header
+                    img.author-avatar(src=post.avatar || "/images/default-avatar.png", alt="Author")
+                    .post-info
+                      h3.post-title #{post.title}
+                      .post-meta
+                        span.post-author
+                          i.fas.fa-user
+                          | #{post.name}
+                        span.post-time
+                          i.fas.fa-clock
+                          | #{post.time}
+
                   .post-content
                     if post.image
-                      img(src=post.image, alt="Post content")  
-                  .post-header
-                    .post-author #{post.name}
-                    .post-time #{post.time}
-                  .post-description #{post.content}
-                  .comment-icon(onclick=`openModal(${post.id})`) ✉
-            else
-              p No posts available.
+                      img.post-image(src=post.image, alt="Post content")
+                    p.post-description #{post.content}
 
-      // Move .groups-sidebar here to correctly position it
+                  .post-footer
+                    button.comment-button(onclick=`openModal(${post.id})`)
+                      i.fas.fa-comment
+                      | Comment
+                    button.like-button
+                      i.fas.fa-thumbs-up
+                      | Like
+
+                  if comments && comments.length
+                    ul.comments-list
+                      each c in comments
+                        if c.post_id === post.id
+                          li.comment-item
+                            b #{c.fullname}:
+                            | #{c.comment}
+            else
+              p.no-posts No posts available
+
       .groups-sidebar
         h2.groups-title Groups
         if groups && groups.length
           each group in groups
-            a.group-button(href=`/group/${group._id}`) #{group.name}
+            a.group-link(href=`/group/${group._id}`)
+              i.fas.fa-users
+              | #{group.name}
         else
-          a.group-button(href="#") Group 1
-          a.group-button(href="#") Group 2
-          a.group-button(href="#") Group 3
+          p.no-groups No groups available

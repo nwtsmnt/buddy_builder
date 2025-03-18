@@ -1,33 +1,29 @@
-const query = require("../models/db");
+// controllers/profile_controller.js
+const db = require('../models/db');
 
-// Get user profile by username
 exports.getProfile = async (req, res) => {
-    try {
-        const username = req.params.username;
-        const user = await query("SELECT * FROM Users WHERE username = ?", [username]);
+  try {
+    // Hardcode userId = 1 for demonstration (or use req.session.userId)
+    const userId = 1;
 
-        if (user.length === 0) {
-            return res.status(404).send("User not found.");
-        }
-
-        res.render("profile", { user: user[0] });
-    } catch (error) {
-        console.error("Error fetching profile:", error);
-        res.status(500).send("Error fetching profile.");
+    // 1) Fetch the user
+    const result1 = await db.query('SELECT * FROM Users WHERE id = ?', [userId]);
+    if (!result1.length) {
+      return res.send('No user found with that ID.');
     }
-};
+    const user = result1[0];
 
-// Update user profile
-exports.updateProfile = async (req, res) => {
-    try {
-        const username = req.params.username;
-        const { bio, profile_picture } = req.body;
+    // 2) Fetch the user's posts (assuming table name "Posts")
+    //    and that "Posts" has a column "user_id" matching the user "id"
+    const result2 = await db.query('SELECT * FROM Posts WHERE user_id = ?', [userId]);
 
-        await query("UPDATE Users SET bio = ?, profile_picture = ? WHERE username = ?", [bio, profile_picture, username]);
+    const user2 = result2[0]
+    // 3) Render profile.pug, passing both "user" and "Posts"
+    //    Make sure the second parameter matches your Pug code (e.g., if your code uses "if Posts && Posts.length")
+    res.render('profile', { user, user2 });
 
-        res.redirect(`/profile/${username}`);
-    } catch (error) {
-        console.error("Error updating profile:", error);
-        res.status(500).send("Error updating profile.");
-    }
+  } catch (err) {
+    console.error('Database query error:', err);
+    res.status(500).send('Database query error');
+  }
 };

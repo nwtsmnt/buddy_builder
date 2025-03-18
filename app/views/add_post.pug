@@ -1,0 +1,99 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Study Buddies - Create Post
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
+    link(rel="stylesheet", href="/css/add_post.css")
+
+  body
+    .app-container
+      nav.sidebar
+        .logo
+          i.fas.fa-graduation-cap
+          span Study Buddies
+        .nav-links
+          a.nav-link.active(href="/newsfeed")
+            i.fas.fa-home
+            span Home
+          a.nav-link(href="/profile")
+            i.fas.fa-user
+            span Profile
+          a.nav-link(href="/groups")
+            i.fas.fa-users
+            span Groups
+          a.nav-link(href="/chat")
+            i.fas.fa-envelope
+            span Chats
+      
+      .main-content
+        header.top-bar
+          .search-container
+            i.fas.fa-search
+            input.search-input(type="text" placeholder="Search...")
+          .user-menu
+            .notifications
+            .profile-menu
+              img.avatar(src="/images/avatars/Boris.jpg" alt="Profile")
+              span.username 
+
+        .content-area
+          .page-header
+            h1.page-title 
+              i.fas.fa-edit
+              | Create New Post
+            button.back-btn(onclick="history.back()")
+              i.fas.fa-arrow-left
+              | Back
+
+          .post-form-container
+            form.post-form(action="/posts" method="POST")
+              .form-group
+                label.form-label(for="post-title") 
+                  i.fas.fa-heading
+                  | Title
+                input#post-title.form-input(
+                  type="text" 
+                  placeholder="What's your post about?"
+                  required
+                )
+
+              .form-group
+                label.form-label(for="post-category")
+                  i.fas.fa-tag
+                  | Category
+                select#post-category.form-input(required)
+                  option(value="" disabled selected) Select a category
+                  option(value="question") Question
+                  option(value="discussion") Discussion
+                  option(value="resource") Study Resource
+                  option(value="event") Study Event
+
+              .form-group
+                label.form-label(for="post-description")
+                  i.fas.fa-paragraph
+                  | Description
+                textarea#post-description.form-input(
+                  placeholder="Share your thoughts, questions, or insights..."
+                  rows="6"
+                  required
+                )
+
+              .form-group
+                label.form-label(for="post-attachments")
+                  i.fas.fa-paperclip
+                  | Attachments
+                .file-upload
+                  input#post-attachments.file-input(type="file" multiple)
+                  .upload-placeholder
+                    i.fas.fa-cloud-upload-alt
+                    span Drag & drop files or click to upload
+
+              .action-buttons
+                button.btn.btn-secondary(type="button" onclick="history.back()")
+                  i.fas.fa-times
+                  | Cancel
+                button.btn.btn-primary(type="submit")
+                  i.fas.fa-paper-plane
+                  | Publish Post

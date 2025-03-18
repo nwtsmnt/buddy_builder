@@ -4,115 +4,94 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title Study Buddies - My Profile
-
-    // Link to your external CSS
     link(rel="stylesheet", href="/css/profile.css")
 
   body
-  .container
-    .header
-      .logo
-        img.logo-icon(src="/images/logo.jpeg" alt="Study Buddies Logo")
-        .site-name Study Buddies
-      .nav-buttons
-        a.nav-button(href="/newsfeed") Home
-        a.nav-button(href="/chat") Chat
-        a.nav-button(href="/edit-profile") Edit Profile
-      .search-area
-        input.search-input(type="text", placeholder="Search...")
-        button.search-button Search
+    .container
+      .header
+        .logo
+          img.logo-icon(src="/images/logo.jpeg" alt="Study Buddies Logo")
+          .site-name Study Buddies
+        .nav-buttons
+          a.nav-button(href="/newsfeed") Home
+          a.nav-button(href="/chat") Chat
+          a.nav-button(href="/edit-profile") Edit Profile
+        .search-area
+          input.search-input(type="text", placeholder="Search...")
+          button.search-button Search
     
-    .profile-banner
-    
-    .profile-content
-      .details-column
-        .section-title Details
-        .detail-item
-          .detail-text(style="width: 80%;")
-        .detail-item
-          .detail-text(style="width: 40%;")
-        .detail-item
-          .detail-text(style="width: 70%;")
-        .detail-item
-          .detail-text(style="width: 75%;")
-        .detail-item
-          .detail-text(style="width: 90%;")
-        .detail-item
-          .detail-text(style="width: 30%;")
-        .detail-item
-          .detail-text(style="width: 70%;")
-        .detail-item
-          .detail-text(style="width: 85%;")
-      
-      .center-column
-        .profile-photo
-        .profile-name #{user ? user.name : 'Name'}
-        div(style="text-align: center; margin-top: 5px; color: #777; font-size: 14px;") 256 followers
+      // BANNER
+      .profile-banner
+        if user && user.banner_url
+          img(src=user.banner_url alt="Profile Banner" style="width:100%; height:auto;")
+        else
+          // fallback or empty banner
+
+      .profile-content
+        // LEFT COLUMN: DETAILS
+        .details-column
+          .section-title Details
+          if user && user.details
+            p= user.details
+          else
+            p No details available
         
-        .bio-box
-          | This is Bio ...
-          .post-content-line(style="width: 95%;")
-          .post-content-line(style="width: 90%;")
-        
-        .posts-title Posts
-        
-        if posts && posts.length
-          each post in posts
+        // CENTER COLUMN
+        .center-column
+          // AVATAR
+          .profile-photo
+            if user && user.avatar_url
+              img(src=user.avatar_url alt="Profile Avatar" style="width:100%; height:100%; object-fit:cover;")
+            else
+              // fallback image or text
+
+          .profile-name #{user ? user.name : 'Name'}
+          div(style="text-align: center; margin-top: 5px; color: #777; font-size: 14px;") 0 followers
+          
+          // Optional bio box or summary
+          .bio-box
+            if user && user.bio
+              p= user.bio
+            else
+              p No bio set
+
+          // Display the user's posts
+          .posts-title Posts
+          if Posts && Posts.length
+            each p in Posts
+              .post
+                .post-header
+                  .post-author-icon
+                  .post-author This User
+                  .post-time #{p.created_at}
+                .post-content
+                  h3= p.title
+                  p= p.content
+                .post-image
+                  if p.image
+                    img(src=p.image alt="Post image")
+                .comment-icon ✉
+          else
             .post
               .post-header
                 .post-author-icon
-                .post-author #{post.name}
-                .post-time #{post.time}
+                .post-author No Posts
+                .post-time
               .post-content
-                .post-content-line(style="width: 100%;")
-                .post-content-line(style="width: 95%;")
-                .post-content-line(style="width: 80%;")
+                p This user has no posts yet
               .post-image
               .comment-icon ✉
-        else
-          .post
-            .post-header
-              .post-author-icon
-              .post-author Name
-              .post-time Post Time
-            .post-content
-              .post-content-line(style="width: 100%;")
-              .post-content-line(style="width: 95%;")
-              .post-content-line(style="width: 80%;")
-            .post-image
-            .comment-icon ✉
-      
-      .interests-column
-        .section-title Interested In
-        .interest-item
-          .interest-text(style="width: 60%;")
-        .interest-item
-          .interest-text(style="width: 75%;")
-        .interest-item
-          .interest-text(style="width: 85%;")
-        .interest-item
-          .interest-text(style="width: 90%;")
-        .interest-item
-          .interest-text(style="width: 70%;")
-        .interest-item
-          .interest-text(style="width: 80%;")
-        .interest-item
-          .interest-text(style="width: 85%;")
-        .interest-item
-          .interest-text(style="width: 75%;")
         
-        .section-title(style="margin-top: 30px;") Skills
-        .skill-item
-          .skill-text(style="width: 65%;")
-        .skill-item
-          .skill-text(style="width: 70%;")
-        .skill-item
-          .skill-text(style="width: 85%;")
-        .skill-item
-          .skill-text(style="width: 90%;")
-        .skill-item
-          .skill-text(style="width: 60%;")
-        .skill-item
-          .skill-text(style="width: 80%;")
-        .skill-item
-          .skill-text(style="width: 75%;")
+        // RIGHT COLUMN: INTERESTS & SKILLS
+        .interests-column
+          .section-title Interested In
+          if user && user.interests
+            p= user.interests
+          else
+            p No interests provided
+          
+          .section-title(style="margin-top: 30px;") Skills
+          if user && user.skills
+            p= user.skills
+          else
+            p No skills provided

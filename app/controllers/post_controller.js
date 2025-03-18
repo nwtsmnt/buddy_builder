@@ -12,6 +12,7 @@ async function renderNewsfeed(req, res) {
     }
 }
 
+
 module.exports = {
     renderNewsfeed
 };

@@ -1,0 +1,6 @@
+# Ignore folders
+/db/
+/node_modules/
+
+# Ignore environment files
+.env

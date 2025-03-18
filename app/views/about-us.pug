@@ -1,84 +1,79 @@
-extends layout
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Study Buddies - About Us
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
+    link(rel="stylesheet", href="/css/about-us.css")
 
-block head
-  link(rel="stylesheet", href="/css/about-us.css")
-
-block content
-  .container
-    .main-area
-      .header
+  body
+    .app-container
+      nav.sidebar
         .logo
-          img.logo-icon(src="/images/logo.jpeg" alt="Study Buddies Logo")
-          h2 Study Buddies
-      
-      .content-container
-        .about-hero
-          h1 About Study Buddies
-          p Empowering Students, Together.
-        
-        .about-section
-          h2.section-title Our Mission
-          .row
-            .col
-              p Study Buddies is a collaborative platform designed to connect students with study buddies, share resources, and excel in academics.
-              p We believe in a learning community where knowledge can be freely shared.
-            .col
-              p By connecting students with similar interests and goals, we help create lasting educational relationships.
-        
-        .about-section
-          h2.section-title What Makes Us Different
-          .feature-grid
-            .feature-box
-              .feature-icon 👥
-              h3 Student-Centric
-              p Students can create accounts, search for peers, and join study groups.
-            
-            .feature-box
-              .feature-icon 💬
-              h3 Interactive Discussions
-              p Engage in discussions, share notes, and learn together.
-            
-            .feature-box
-              .feature-icon 🎓
-              h3 Tutor Support
-              p Tutors provide expert guidance and ensure quality learning.
-        
-        .about-section
-          h2.section-title Meet Our Team
-          .team-container
-            .team-member
-              .team-photo
-                img(src="/images/tom.png" alt="Tom's photo")
-              h3.team-name Tom
-            
-            .team-member
-              .team-photo
-                img(src="/images/maruf.png" alt="Maruf's photo")
-              h3.team-name Maruf
-            
-            .team-member
-              .team-photo
-                img(src="/images/roman.png" alt="Roman's photo")
-              h3.team-name Roman
-            
-            .team-member
-              .team-photo
-                img(src="/images/alin.png" alt="Alin's photo")
-              h3.team-name Alin
-        
-        .about-section
-          h2.section-title What Our Users Say
-          .testimonial
-            p.testimonial-text "Study Buddies has transformed my university experience. I've found study partners for all my difficult classes and improved my grades significantly."
-            p.testimonial-author Boris Jonson, Computer Science Student
-          
-          .testimonial
-            p.testimonial-text "As a tutor, I can reach more students and create interactive learning experiences."
-            p.testimonial-author Professor Thomas Lee, Mathematics Tutor
-        
-        .cta-section
-          h2.cta-title Ready to Join Our Community?
-          p Start your journey with Study Buddies today.
-          .cta-buttons
-            a.overlay-button(href="/auth/signup") Sign Up
-            a.overlay-button(href="/auth/login") Already a member? Log In
+          i.fas.fa-graduation-cap
+          span Study Buddies
+        .nav-links
+          a.nav-link(href="/profile")
+            i.fas.fa-user
+            span My Profile
+          a.nav-link(href="/chat")
+            i.fas.fa-comments
+            span Chats
+          a.nav-link(href="/add_post")
+            i.fas.fa-plus-circle
+            span Add Post
+          a.nav-link.active(href="/about-us")
+            i.fas.fa-info-circle
+            span About Us
+          a.nav-link(href="/logout")
+            i.fas.fa-sign-out-alt
+            span Log Out
+
+      .main-content
+        header.top-bar
+          .search-container
+            i.fas.fa-search
+            input.search-input(type="text" placeholder="Search...")
+          .user-menu
+            .notifications
+            .profile-menu
+              img.avatar(src="/images/avatars/Boris.jpg" alt="Profile")
+              span.username
+
+        .content-area
+          .page-header
+            h1.page-title 
+              i.fas.fa-info-circle
+              | About Us
+
+          .about-container
+            .about-section
+              h2.section-title Our Mission
+              p.section-description 
+                | At Study Buddies, our mission is to connect students and learners worldwide to foster collaboration, share knowledge, and build a supportive learning community.
+
+            .about-section
+              h2.section-title Our Vision
+              p.section-description 
+                | We envision a world where education is accessible to everyone, and learners can find the resources, support, and motivation they need to succeed.
+
+            .about-section
+              h2.section-title Meet the Team
+              .team-members
+                .team-member
+                  img.member-avatar(src="/images/roman.png" alt="Roman")
+                  h3.member-name Roman Reigns
+                  p.member-role 
+                .team-member
+                  img.member-avatar(src="/images/maruf.png" alt="Maruf")
+                  h3.member-name Maruf Ahmed
+                  p.member-role 
+                .team-member
+                  img.member-avatar(src="/images/tom.png" alt="Tom")
+                  h3.member-name Tom Hardy
+                  p.member-role 
+                .team-member
+                  img.member-avatar(src="/images/alin.png" alt="Alin")
+                  h3.member-name Alin
+                  p.member-role 
