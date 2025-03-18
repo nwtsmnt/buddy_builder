@@ -6,6 +6,11 @@
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
 
+.header {
+  padding: 0px 0px; /* reduce from something bigger */
+  height: auto;       /* remove any fixed height if present */
+}
+
 .about-hero {
   text-align: center;
   background-color: #3b5998;
@@ -171,4 +176,26 @@
   flex: 1;
   min-width: 300px;
   padding: 0 20px;
+}
+
+.team-container {
+  display: flex;
+  justify-content: center; /* centers them horizontally */
+  gap: 20px;               /* spacing between circles */
+  flex-wrap: nowrap;       /* keeps them all in one row, no wrapping */
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: auto;
+  border: none;
+  color: #3b5998;
+  padding: 8px;
+  margin-right: 10px;
 }

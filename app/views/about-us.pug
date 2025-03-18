@@ -5,29 +5,22 @@ block head
 
 block content
   .container
-    .left-sidebar
-      a.nav-button(href="/profile") My Profile
-      a.nav-button(href="/chat") Chats
-      a.nav-button(href="/add-post") Add Post
-      a.nav-button(href="/about-us") About Us
-      a.nav-button(href="/logout") Log Out
-    
     .main-area
       .header
         .logo
-          .logo-icon ✉
-          h2 Buddy Builder
+          img.logo-icon(src="/images/logo.jpeg" alt="Study Buddies Logo")
+          h2 Study Buddies
       
       .content-container
         .about-hero
-          h1 About Buddy Builder
+          h1 About Study Buddies
           p Empowering Students, Together.
         
         .about-section
           h2.section-title Our Mission
           .row
             .col
-              p Buddy Builder is a collaborative platform designed to connect students with study buddies, share resources, and excel in academics.
+              p Study Buddies is a collaborative platform designed to connect students with study buddies, share resources, and excel in academics.
               p We believe in a learning community where knowledge can be freely shared.
             .col
               p By connecting students with similar interests and goals, we help create lasting educational relationships.
@@ -55,29 +48,29 @@ block content
           .team-container
             .team-member
               .team-photo
-                img(src="/images/team/tom.png" alt="Tom's photo")
+                img(src="/images/tom.png" alt="Tom's photo")
               h3.team-name Tom
             
             .team-member
               .team-photo
-                img(src="/images/team/maruf.png" alt="Maruf's photo")
+                img(src="/images/maruf.png" alt="Maruf's photo")
               h3.team-name Maruf
             
             .team-member
               .team-photo
-                img(src="/images/team/roman.png" alt="Roman's photo")
+                img(src="/images/roman.png" alt="Roman's photo")
               h3.team-name Roman
             
             .team-member
               .team-photo
-                img(src="/images/team/alin.png" alt="Alin's photo")
+                img(src="/images/alin.png" alt="Alin's photo")
               h3.team-name Alin
         
         .about-section
           h2.section-title What Our Users Say
           .testimonial
-            p.testimonial-text "Buddy Builder has transformed my university experience. I've found study partners for all my difficult classes and improved my grades significantly."
-            p.testimonial-author Jamie White, Computer Science Student
+            p.testimonial-text "Study Buddies has transformed my university experience. I've found study partners for all my difficult classes and improved my grades significantly."
+            p.testimonial-author Boris Jonson, Computer Science Student
           
           .testimonial
             p.testimonial-text "As a tutor, I can reach more students and create interactive learning experiences."
@@ -85,7 +78,7 @@ block content
         
         .cta-section
           h2.cta-title Ready to Join Our Community?
-          p Start your journey with Buddy Builder today.
+          p Start your journey with Study Buddies today.
           .cta-buttons
-            a.cta-button(href="/auth/signup") Sign Up as a Student
+            a.overlay-button(href="/auth/signup") Sign Up
             a.overlay-button(href="/auth/login") Already a member? Log In

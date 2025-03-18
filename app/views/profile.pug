@@ -1,19 +1,118 @@
-extends layout
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Study Buddies - My Profile
 
-block content
-    .container
-        h1= user.name + "'s Profile"
+    // Link to your external CSS
+    link(rel="stylesheet", href="/css/profile.css")
+
+  body
+  .container
+    .header
+      .logo
+        img.logo-icon(src="/images/logo.jpeg" alt="Study Buddies Logo")
+        .site-name Study Buddies
+      .nav-buttons
+        a.nav-button(href="/newsfeed") Home
+        a.nav-button(href="/chat") Chat
+        a.nav-button(href="/edit-profile") Edit Profile
+      .search-area
+        input.search-input(type="text", placeholder="Search...")
+        button.search-button Search
+    
+    .profile-banner
+    
+    .profile-content
+      .details-column
+        .section-title Details
+        .detail-item
+          .detail-text(style="width: 80%;")
+        .detail-item
+          .detail-text(style="width: 40%;")
+        .detail-item
+          .detail-text(style="width: 70%;")
+        .detail-item
+          .detail-text(style="width: 75%;")
+        .detail-item
+          .detail-text(style="width: 90%;")
+        .detail-item
+          .detail-text(style="width: 30%;")
+        .detail-item
+          .detail-text(style="width: 70%;")
+        .detail-item
+          .detail-text(style="width: 85%;")
+      
+      .center-column
+        .profile-photo
+        .profile-name #{user ? user.name : 'Name'}
+        div(style="text-align: center; margin-top: 5px; color: #777; font-size: 14px;") 256 followers
         
-        if user.profile_picture
-            img(src=user.profile_picture, alt="Profile Picture")
-
-        p Bio: #{user.bio}
-
-        form(action=`/profile/${user.username}/update` method="POST")
-            label(for="bio") Bio:
-            textarea(name="bio")= user.bio
-            
-            label(for="profile_picture") Profile Picture URL:
-            input(type="text" name="profile_picture" value=user.profile_picture)
-
-            button(type="submit") Update Profile
+        .bio-box
+          | This is Bio ...
+          .post-content-line(style="width: 95%;")
+          .post-content-line(style="width: 90%;")
+        
+        .posts-title Posts
+        
+        if posts && posts.length
+          each post in posts
+            .post
+              .post-header
+                .post-author-icon
+                .post-author #{post.name}
+                .post-time #{post.time}
+              .post-content
+                .post-content-line(style="width: 100%;")
+                .post-content-line(style="width: 95%;")
+                .post-content-line(style="width: 80%;")
+              .post-image
+              .comment-icon ✉
+        else
+          .post
+            .post-header
+              .post-author-icon
+              .post-author Name
+              .post-time Post Time
+            .post-content
+              .post-content-line(style="width: 100%;")
+              .post-content-line(style="width: 95%;")
+              .post-content-line(style="width: 80%;")
+            .post-image
+            .comment-icon ✉
+      
+      .interests-column
+        .section-title Interested In
+        .interest-item
+          .interest-text(style="width: 60%;")
+        .interest-item
+          .interest-text(style="width: 75%;")
+        .interest-item
+          .interest-text(style="width: 85%;")
+        .interest-item
+          .interest-text(style="width: 90%;")
+        .interest-item
+          .interest-text(style="width: 70%;")
+        .interest-item
+          .interest-text(style="width: 80%;")
+        .interest-item
+          .interest-text(style="width: 85%;")
+        .interest-item
+          .interest-text(style="width: 75%;")
+        
+        .section-title(style="margin-top: 30px;") Skills
+        .skill-item
+          .skill-text(style="width: 65%;")
+        .skill-item
+          .skill-text(style="width: 70%;")
+        .skill-item
+          .skill-text(style="width: 85%;")
+        .skill-item
+          .skill-text(style="width: 90%;")
+        .skill-item
+          .skill-text(style="width: 60%;")
+        .skill-item
+          .skill-text(style="width: 80%;")
+        .skill-item
+          .skill-text(style="width: 75%;")
