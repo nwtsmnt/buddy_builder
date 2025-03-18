@@ -1,0 +1,48 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Study Buddies
+    link(rel="stylesheet", href="/css/chat.css")
+  body
+    .app-container
+      header.app-header
+        button.back-button X
+        h1.app-title Study Buddies
+        .header-buttons
+          button.header-btn Profile
+          button.header-btn NewsFeed
+          button.header-btn Groups
+        .search-container
+          input.search-input(type="text", placeholder="Search...")
+          button.search-button Search
+      
+      main.app-content
+        .sidebar.left-sidebar
+          h2.sidebar-title Recent Chat
+          .chat-list
+            each val in [1, 2, 3, 4, 5]
+              .chat-item
+                button.close-btn X
+                input.chat-name(type="text", placeholder="Name")
+            
+        .chat-area
+          .chat-header
+            span.user-name User Name
+            button.options-btn ⋮
+          
+          .messages-container
+            //- Messages will be dynamically added here by JavaScript
+          
+          .bottom-bar
+            textarea.message-input(placeholder="This is text Box...")
+            button.send-button →
+            
+        .sidebar.right-sidebar
+          h2.sidebar-title Notes
+          .notes-container
+            textarea.notes-text
+            button.save-button Save Notes
+    
+    script(src="script.js")
