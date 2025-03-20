@@ -30,12 +30,15 @@ async function login(req, res) {
             return res.status(400).send("Email and password are required.");
         }
 
-        const user = await query("SELECT * FROM Users WHERE email = ? AND password = ?", 
-            [email, password]);
+        const user = await query("SELECT * FROM Users WHERE email = ? AND password = ?", [email, password]);
 
         if (user.length === 0) {
             return res.status(400).send("Invalid email or password.");
         }
+
+        // Store the user's ID in the session
+        req.session.userId = user[0].id;
+        console.log("User ID set in session:", req.session.userId);
 
         return res.redirect("/newsfeed");
     } catch (error) {

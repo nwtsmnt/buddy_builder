@@ -2,7 +2,7 @@ doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title Study Buddies - Newsfeed
     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
     link(rel="stylesheet", href="/css/newsfeed.css")
@@ -38,8 +38,11 @@ html(lang="en")
           .user-menu
             .notifications
             .profile-menu
-              img.avatar(src="/images/avatars/Boris.jpg" alt="Profile")
-              span.username 
+              if user && user.avatar_url
+                img.avatar(src=user.avatar_url alt="Profile")
+              else
+                img.avatar(src="/images/default-avatar.png" alt="Default Profile Picture")
+              span.username #{user ? user.name : 'User'}
 
         .content-area
           .page-header
@@ -52,15 +55,13 @@ html(lang="en")
               each post in posts
                 .post-card
                   .post-header
-                    img.author-avatar(src=post.avatar || "/images/default-avatar.png", alt="Author")
+                    img.author-avatar(src=post.author_avatar || "/images/default-avatar.png", alt="Author")
                     .post-info
                       h3.post-title #{post.title}
                       .post-meta
                         span.post-author
-                          i.fas.fa-user
-                          | #{post.name}
+                          | #{post.author_name}
                         span.post-time
-                          i.fas.fa-clock
                           | #{post.time}
 
                   .post-content
@@ -69,13 +70,12 @@ html(lang="en")
                     p.post-description #{post.content}
 
                   .post-footer
-                    button.comment-button(onclick=`openModal(${post.id})`)
-                      i.fas.fa-comment
-                      | Comment
-                    button.like-button
-                      i.fas.fa-thumbs-up
-                      | Like
-
+                    form.comment-form(action="/add-comment" method="POST")
+                      input(type="hidden" name="postId" value=post.id)
+                      textarea(name="comment" placeholder="Add a comment..." required)
+                      button.comment-button(type="submit")
+                        i.fas.fa-comment
+                        | Comment
                   if comments && comments.length
                     ul.comments-list
                       each c in comments

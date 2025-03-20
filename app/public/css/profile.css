@@ -230,15 +230,13 @@ body {
     position: relative;
   }
   
-  .post-author-icon:after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: linear-gradient(to bottom right, transparent calc(50% - 1px), #ddd, transparent calc(50% + 1px)),
-                linear-gradient(to bottom left, transparent calc(50% - 1px), #ddd, transparent calc(50% + 1px));
+  
+  .post-author-icon img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px; 
   }
   
   .post-author {
@@ -277,4 +275,3 @@ body {
     margin: 10px;
     color: #3b5998;
   }
-  

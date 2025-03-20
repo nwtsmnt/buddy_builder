@@ -243,6 +243,23 @@ body {
   color: var(--primary-color);
 }
 
+/* Profile Menu */
+.profile-menu {
+  display: flex;
+  align-items: center;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjust the gap as needed */
+}
+
+.username {
+  font-size: 16px;
+  font-weight: bold;
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .app-container {
@@ -266,5 +283,20 @@ body {
 
   .post-card {
     padding: 1rem;
+  }
+
+  .comment-form {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+  }
+  
+  .comment-form textarea {
+    flex-grow: 1;
+    resize: none;
+  }
+  
+  .comment-button {
+    flex-shrink: 0;
   }
 }

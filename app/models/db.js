@@ -22,6 +22,5 @@ async function query(sql, params) {
   const [rows] = await pool.execute(sql, params);
   return rows;
 }
-module.exports = {
-  query,
-}
+
+module.exports.query = (sql, params) => pool.query(sql, params).then(([results]) => results);
