@@ -2,7 +2,7 @@ const { query } = require("../models/db");
 
 async function getProfile(req, res) {
     try {
-        const userId = req.query.id; // Assuming user ID is passed as a query param
+        const userId = req.query.id; 
         if (!userId) {
             return res.status(400).send("User ID is required.");
         }
