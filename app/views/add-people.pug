@@ -1,0 +1,189 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Study Buddies - Add People
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
+    link(rel="stylesheet", href="/css/add-people.css")
+
+  body
+    .app-container
+      nav.sidebar
+        .logo
+          i.fas.fa-graduation-cap
+          span Study Buddies
+        .nav-links
+          a.nav-link(href="/newsfeed")
+            i.fas.fa-home
+            span Home
+          a.nav-link(href="/profile")
+            i.fas.fa-user
+            span My Profile
+          a.nav-link(href="/chat")
+            i.fas.fa-comments
+            span Chats
+          a.nav-link(href="/groups")
+            i.fas.fa-users
+            span Groups
+          a.nav-link.active(href="/add-people")
+            i.fas.fa-user-plus
+            span Add People
+          a.nav-link(href="/about-us")
+            i.fas.fa-info-circle
+            span About Us
+          a.nav-link(href="/logout")
+            i.fas.fa-sign-out-alt
+            span Log Out
+
+      .main-content
+        header.top-bar
+          .search-container
+            i.fas.fa-search
+            input.search-input(type="text" placeholder="Search for study buddies...")
+          .user-menu
+            .profile-menu
+              img.avatar(src="/images/default-avatar.png" alt="Profile")
+              span.username User
+
+        .scrollable-content
+          .people-content
+            .filters-sidebar
+              .sidebar-header
+                h3 Find Study Buddies
+              
+              .filter-section
+                h4 Filter By
+                
+                .filter-group
+                  h5 Subject
+                  .filter-options
+                    label.filter-option
+                      input(type="checkbox", name="subject", value="math")
+                      span Mathematics
+                    label.filter-option
+                      input(type="checkbox", name="subject", value="science")
+                      span Science
+                    label.filter-option
+                      input(type="checkbox", name="subject", value="programming")
+                      span Programming
+                    label.filter-option
+                      input(type="checkbox", name="subject", value="literature")
+                      span Literature
+                
+                .filter-group
+                  h5 Academic Level
+                  .filter-options
+                    label.filter-option
+                      input(type="checkbox", name="level", value="freshman")
+                      span Freshman
+                    label.filter-option
+                      input(type="checkbox", name="level", value="sophomore")
+                      span Sophomore
+                    label.filter-option
+                      input(type="checkbox", name="level", value="junior")
+                      span Junior
+                    label.filter-option
+                      input(type="checkbox", name="level", value="senior")
+                      span Senior
+                    label.filter-option
+                      input(type="checkbox", name="level", value="graduate")
+                      span Graduate
+                
+                .filter-group
+                  h5 Availability
+                  .filter-options
+                    label.filter-option
+                      input(type="checkbox", name="availability", value="weekday-morning")
+                      span Weekday Mornings
+                    label.filter-option
+                      input(type="checkbox", name="availability", value="weekday-afternoon")
+                      span Weekday Afternoons
+                    label.filter-option
+                      input(type="checkbox", name="availability", value="weekday-evening")
+                      span Weekday Evenings
+                    label.filter-option
+                      input(type="checkbox", name="availability", value="weekend")
+                      span Weekends
+              
+              button.apply-filters
+                i.fas.fa-filter
+                span Apply Filters
+            
+            .main-people-area
+              .category-tabs
+                .tab.active All People
+                .tab Your Connections
+                .tab Pending Requests
+                .tab Recommended
+              
+              .people-grid
+                each val in [1, 2, 3, 4, 5, 6, 7, 8]
+                  .person-card
+                    .compatibility-badge #{85 + (val % 10)}%
+                    .person-avatar
+                      img(src=`/images/default-avatar.png` alt="User")
+                    h3.person-name #{['Alex', 'Taylor', 'Jordan', 'Casey', 'Morgan', 'Riley', 'Avery', 'Sam'][val - 1]} #{['Smith', 'Johnson', 'Williams', 'Jones', 'Brown', 'Davis', 'Miller', 'Wilson'][val - 1]}
+                    p.person-major #{['Computer Science', 'Mathematics', 'Physics', 'Biology', 'English Literature', 'Chemistry', 'Psychology', 'Engineering'][val - 1]} Major
+                    
+                    ul.person-subjects
+                      each subject in [['Algorithms', 'Data Structures', 'Web Dev'], ['Calculus', 'Statistics', 'Algebra'], ['Quantum', 'Mechanics', 'Electromagnetism'], ['Genetics', 'Ecology', 'Microbiology'], ['Shakespeare', 'Poetry', 'Creative Writing'], ['Organic', 'Inorganic', 'Analytical'], ['Cognitive', 'Developmental', 'Social'], ['Mechanical', 'Electrical', 'Civil']][val - 1]
+                        li= subject
+                    
+                    .person-footer
+                      .availability
+                        i.fas.fa-clock
+                        span #{['Weekday Evenings', 'Weekends', 'Weekday Mornings', 'Afternoons', 'Flexible', 'Evenings', 'Mornings & Evenings', 'Weekends Only'][val - 1]}
+                      
+                      .person-actions
+                        if val % 3 === 0
+                          button.connect-btn.pending
+                            i.fas.fa-clock
+                            span Pending
+                        else if val % 4 === 0
+                          button.connect-btn.connected
+                            i.fas.fa-check
+                            span Connected
+                        else
+                          button.connect-btn
+                            i.fas.fa-plus
+                            span Connect
+              
+              .pagination
+                button.pagination-btn.prev
+                  i.fas.fa-chevron-left
+                .pagination-pages
+                  .page-number.active 1
+                  .page-number 2
+                  .page-number 3
+                button.pagination-btn.next
+                  i.fas.fa-chevron-right
+            
+            .recommendations-sidebar
+              .rec-header
+                h3 Perfect Matches
+                button.refresh-btn
+                  i.fas.fa-sync-alt
+              
+              .perfect-matches
+                each val in [1, 2, 3, 4]
+                  .match-item
+                    .match-avatar
+                      img(src="/images/default-avatar.png" alt="Match")
+                      .match-percentage 95%
+                    .match-info
+                      h4 #{['Emma', 'Noah', 'Olivia', 'Liam'][val - 1]} #{['Garcia', 'Martinez', 'Rodriguez', 'Lee'][val - 1]}
+                      p #{['Same classes as you!', 'Similar study habits', 'Complementary skills', 'Near your location'][val - 1]}
+                    button.quick-connect
+                      i.fas.fa-plus
+              
+              .rec-section
+                h4 Study Groups You May Like
+                .mini-group-list
+                  each val in [1, 2, 3]
+                    .mini-group
+                      .mini-group-icon
+                        i.fas.fa-users
+                      .mini-group-info
+                        h5 #{['Calculus Masters', 'Python Coders', 'Chemistry Lab'][val - 1]}
+                        p #{val * 8} members
