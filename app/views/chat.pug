@@ -3,44 +3,146 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Study Buddies
+    title Study Buddies - Chat
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
     link(rel="stylesheet", href="/css/chat.css")
+
   body
     .app-container
-      header.app-header
+      nav.sidebar
         .logo
-            img.logo-icon(src="/images/logo.jpeg" alt="Buddy Builder Logo")
-        h1.app-title Study Buddies
-        .header-buttons
-            button.header-btn(type="button", onclick="window.location.href='/newsfeed'") Home
-            button.header-btn(type="button", onclick="window.location.href='/profile'") Profile
-            button.header-btn(type="button", onclick="window.location.href='/groups'") Groups
-        .search-container
-          input.search-input(type="text", placeholder="Search...")
-          button.search-button Search
-      
-      main.app-content
-        .sidebar.left-sidebar
-          h2.sidebar-title Recent Chat
-          .chat-list
-            each val in [1]
-              .chat-item
-                button.close-btn X
-                input.chat-name(type="text", placeholder="Boris - Roman")
+          i.fas.fa-graduation-cap
+          span Study Buddies
+        .nav-links
+          a.nav-link(href="/newsfeed")
+            i.fas.fa-home
+            span Home
+          a.nav-link(href="/profile")
+            i.fas.fa-user
+            span My Profile
+          a.nav-link.active(href="/chat")
+            i.fas.fa-comments
+            span Chats
+          a.nav-link(href="/add_post")
+            i.fas.fa-plus-circle
+            span Add Post
+          a.nav-link(href="/about-us")
+            i.fas.fa-info-circle
+            span About Us
+          a.nav-link(href="/logout")
+            i.fas.fa-sign-out-alt
+            span Log Out
+
+      .main-content
+        header.top-bar
+          .search-container
+            i.fas.fa-search
+            input.search-input(type="text" placeholder="Search conversations...")
+          .user-menu
+            .profile-menu
+              img.avatar(src="/images/default-avatar.png" alt="Profile")
+              span.username User
+
+        .chat-content
+          .chat-sidebar
+            .chat-sidebar-header
+              h3 Conversations
+              button.new-chat-btn
+                i.fas.fa-plus
+
+            .conversation-list
+              each val in [1, 2, 3, 4, 5]
+                .conversation-item(class=val === 1 ? 'active' : '')
+                  .conversation-avatar
+                    img(src=`/images/default-avatar.png` alt="Contact")
+                    .status-indicator(class=val % 2 === 0 ? 'online' : '')
+                  .conversation-info
+                    .conversation-name Contact Name #{val}
+                    .conversation-preview Latest message preview...
+                  .conversation-meta
+                    .conversation-time 12:30 PM
+                    if val % 3 === 0
+                      .unread-badge 2
+
+          .chat-main
+            .chat-header
+              .chat-contact
+                img.contact-avatar(src="/images/default-avatar.png" alt="Contact")
+                .contact-info
+                  .contact-name Contact Name
+                  .contact-status
+                    span.status-dot.online
+                    | Online
+              .chat-actions
+                button.action-btn
+                  i.fas.fa-phone
+                button.action-btn
+                  i.fas.fa-video
+                button.action-btn
+                  i.fas.fa-ellipsis-v
+
+            .messages-container
+              .date-divider
+                span Today
+              
+              .message.received
+                .message-avatar
+                  img(src="/images/default-avatar.png" alt="Avatar")
+                .message-content
+                  .message-bubble Hello! How are you doing today?
+                  .message-time 10:30 AM
+
+              .message.sent
+                .message-content
+                  .message-bubble I'm doing great! Just working on our project. How about you?
+                  .message-time 10:32 AM
+
+              .message.received
+                .message-avatar
+                  img(src="/images/default-avatar.png" alt="Avatar")
+                .message-content
+                  .message-bubble I'm good too! Would you like to meet up to study for the upcoming test?
+                  .message-time 10:33 AM
+
+              .message.sent
+                .message-content
+                  .message-bubble That sounds perfect! When are you free?
+                  .message-time 10:35 AM
+              
+              .message.received
+                .message-avatar
+                  img(src="/images/default-avatar.png" alt="Avatar")
+                .message-content
+                  .message-bubble How about tomorrow at 3 PM in the library?
+                  .message-time 10:37 AM
+
+              .message.sent
+                .message-content
+                  .message-bubble Perfect, I'll see you then!
+                  .message-time 10:38 AM
+
+            .message-composer
+              button.attachment-btn
+                i.fas.fa-paperclip
+              textarea.message-input(placeholder="Type a message...")
+              button.emoji-btn
+                i.fas.fa-smile
+              button.send-btn
+                i.fas.fa-paper-plane
+
+          .notes-sidebar
+            .notes-header
+              h3 Study Notes
+              button.minimize-btn
+                i.fas.fa-chevron-right
             
-        .chat-area
-          .chat-header
-            span.user-name User Name
-            button.options-btn ⋮
-          
-          .messages-container
-          
-          .bottom-bar
-            textarea.message-input(placeholder="This is text Box...")
-            button.send-button →
+            .notes-content
+              textarea.notes-textarea(placeholder="Take notes for your conversation here...")
             
-        .sidebar.right-sidebar
-          h2.sidebar-title Notes
-          .notes-container
-            textarea.notes-text
-            button.save-button Save Notes
+            .notes-actions
+              button.notes-btn.secondary
+                i.fas.fa-trash
+                | Clear
+              button.notes-btn.primary
+                i.fas.fa-save
+                | Save
