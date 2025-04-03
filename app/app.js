@@ -16,6 +16,8 @@ const editProfileRoutes = require('./routes/edit_profile_routes');
 const newsfeedRoutes = require('./routes/newsfeed_routes');
 const addPeopleRoutes = require('./routes/add_people_routes'); // Changed from add-people.js
 
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -49,6 +51,7 @@ app.use("/groups", groupsRoutes);
 app.use("/", editProfileRoutes);
 app.use("/newsfeed", newsfeedRoutes);
 app.use("/add-people", addPeopleRoutes); // Keep URL path the same
+app.use('/uploads', express.static('uploads'));
 
 // Start server
 app.listen(3000, () => {

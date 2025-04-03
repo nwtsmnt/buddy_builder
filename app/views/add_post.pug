@@ -43,13 +43,14 @@ html(lang="en")
               | Back
 
           .post-form-container
-            form.post-form(action="/posts" method="POST")
+            form.post-form(action="/add_post" method="POST" enctype="multipart/form-data")
               .form-group
                 label.form-label(for="post-title") 
                   i.fas.fa-heading
                   | Title
                 input#post-title.form-input(
                   type="text" 
+                  name="title"
                   placeholder="What's your post about?"
                   required
                 )
@@ -58,7 +59,7 @@ html(lang="en")
                 label.form-label(for="post-category")
                   i.fas.fa-tag
                   | Category
-                select#post-category.form-input(required)
+                select#post-category.form-input(name="category" required)
                   option(value="" disabled selected) Select a category
                   option(value="question") Question
                   option(value="discussion") Discussion
@@ -70,6 +71,7 @@ html(lang="en")
                   i.fas.fa-paragraph
                   | Description
                 textarea#post-description.form-input(
+                  name = "content"
                   placeholder="Share your thoughts, questions, or insights..."
                   rows="6"
                   required
@@ -80,7 +82,7 @@ html(lang="en")
                   i.fas.fa-paperclip
                   | Attachments
                 .file-upload
-                  input#post-attachments.file-input(type="file" multiple)
+                  input#post-attachments.file-input(type="file" name="attachments" multiple)
                   .upload-placeholder
                     i.fas.fa-cloud-upload-alt
                     span Drag & drop files or click to upload
