@@ -71,7 +71,7 @@ html(lang="en")
 
                   .post-footer
                     form.comment-form(action="/add-comment" method="POST")
-                      input(type="hidden" name="postId" value=post.id)
+                      input(type="hidden" name="post_id" value=post.id)
                       textarea(name="comment" placeholder="Add a comment..." required)
                       button.comment-button(type="submit")
                         i.fas.fa-comment
