@@ -32,9 +32,11 @@ html(lang="en")
 
       .main-content
         header.top-bar
-          .search-container
+          form.search-container(action="/newsfeed/search" method="GET")
             i.fas.fa-search
-            input.search-input(type="text" placeholder="Search...")
+            input.search-input(type="text" name="query" placeholder="Search posts..." value=searchQuery)
+            button.search-button(type="submit") 
+              i.fas.fa-search
           .user-menu
             .notifications
             .profile-menu
