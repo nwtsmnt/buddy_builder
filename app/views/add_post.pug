@@ -14,18 +14,30 @@ html(lang="en")
           i.fas.fa-graduation-cap
           span Study Buddies
         .nav-links
-          a.nav-link.active(href="/newsfeed")
+          a.nav-link(href="/newsfeed")
             i.fas.fa-home
             span Home
           a.nav-link(href="/profile")
             i.fas.fa-user
-            span Profile
+            span My Profile
+          a.nav-link(href="/chat")
+            i.fas.fa-comments
+            span Chats
           a.nav-link(href="/groups")
             i.fas.fa-users
             span Groups
-          a.nav-link(href="/chat")
-            i.fas.fa-envelope
-            span Chats
+          a.nav-link(href="/add-people")
+            i.fas.fa-user-plus
+            span Add People
+          a.nav-link.active(href="/add_post")
+            i.fas.fa-plus-circle
+            span Add Post
+          a.nav-link(href="/about-us")
+            i.fas.fa-info-circle
+            span About Us
+          a.nav-link(href="/logout")
+            i.fas.fa-sign-out-alt
+            span Log Out
       
       .main-content
         header.top-bar

@@ -4,92 +4,167 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title Study Buddies - My Profile
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
     link(rel="stylesheet", href="/css/profile.css")
 
   body
-    .container
-      .header
+    .app-container
+      nav.sidebar
         .logo
-          img.logo-icon(src="/images/logo.jpeg" alt="Study Buddies Logo")
-          .site-name Study Buddies
-        .nav-buttons
-          a.nav-button(href="/newsfeed") Home
-          a.nav-button(href="/chat") Chat
-          a.nav-button(href="/edit-profile") Edit Profile
-        .search-area
-          input.search-input(type="text", placeholder="Search...")
-          button.search-button Search
-    
-      // BANNER
-      .profile-banner
-        if user && user.banner_url
-          img(src=user.banner_url alt="Profile Banner" style="width:100%; height:auto;")
-        else
-          // fallback or empty banner
+          i.fas.fa-graduation-cap
+          span Study Buddies
+        .nav-links
+          a.nav-link(href="/newsfeed")
+            i.fas.fa-home
+            span Home
+          a.nav-link.active(href="/profile")
+            i.fas.fa-user
+            span My Profile
+          a.nav-link(href="/chat")
+            i.fas.fa-comments
+            span Chats
+          a.nav-link(href="/groups")
+            i.fas.fa-users
+            span Groups
+          a.nav-link(href="/add-people")
+            i.fas.fa-user-plus
+            span Add People
+          a.nav-link(href="/add_post")
+            i.fas.fa-plus-circle
+            span Add Post
+          a.nav-link(href="/about-us")
+            i.fas.fa-info-circle
+            span About Us
+          a.nav-link(href="/logout")
+            i.fas.fa-sign-out-alt
+            span Log Out
 
-      .profile-content
-        // LEFT COLUMN: DETAILS
-        .details-column
-          .section-title Details
-          if user && user.details
-            p= user.details
-          else
-            p No details available
-        
-        // CENTER COLUMN
-        .center-column
-          // AVATAR
-          .profile-photo
-            if user && user.avatar_url
-              img(src=user.avatar_url alt="Profile Avatar" style="width:100%; height:100%; object-fit:cover;")
-            else
-              // fallback image or text
+      .main-content
+        header.top-bar
+          .search-container
+            i.fas.fa-search
+            input.search-input(type="text" placeholder="Search...")
+          .user-menu
+            .profile-menu
+              if user && user.avatar_url
+                img.avatar(src=user.avatar_url alt="Profile")
+              else
+                img.avatar(src="/images/default-avatar.png" alt="Default Profile Picture")
+              span.username #{user ? user.name : 'User'}
 
-          .profile-name #{user ? user.name : 'Name'}
-          div(style="text-align: center; margin-top: 5px; color: #777; font-size: 14px;") 0 followers
+        .content-area
+          .page-header
+            h1.page-title 
+              i.fas.fa-user
+              | My Profile
+            a.edit-profile-btn(href="/edit-profile")
+              i.fas.fa-edit
+              span Edit Profile
           
-          // Optional bio box or summary
-          .bio-box
-            if user && user.bio
-              p= user.bio
-            else
-              p No bio set
+          .profile-container
+            // LEFT COLUMN
+            .profile-sidebar
+              .profile-card
+                .profile-header
+                  .profile-avatar
+                    if user && user.avatar_url
+                      img(src=user.avatar_url alt="Profile Avatar")
+                    else
+                      .avatar-placeholder
+                        i.fas.fa-user
+                  .profile-info
+                    h2.profile-name #{user ? user.name : 'Name'}
+                .profile-stats
+                  .stat-item
+                    i.fas.fa-users
+                    span 0 followers
+                
+                // Bio section
+                .profile-section
+                  h3.section-heading
+                    i.fas.fa-info-circle
+                    | About Me
+                  .section-content
+                    if user && user.bio
+                      p= user.bio
+                    else
+                      p.empty-content No bio set
+                
+              // Details Card
+              .details-card
+                h3.card-heading Details
+                .card-content
+                  if user && user.details
+                    p= user.details
+                  else
+                    p.empty-content No details available
 
-          // Display the user's posts
-          .posts-title Posts
-          if posts && posts.length
-            each post in posts
-              .post
-                .post-header
-                  .post-author-icon
-                    img(src=post.author_avatar alt="Author Avatar" style="width:100%; height:100%; object-fit:cover;")
-                  .post-author #{user.name}
-                  .post-time #{post.created_at}
-                .post-content
-                  h3= post.title
-                  p= post.content
-                if post.image
-                  .post-image
-                    img(src=post.image alt="Post image" style="width:100%; height:auto;")
-                .comment-icon ✉
-          else
-            .post
-              .post-header
-                .post-author-icon
-                .post-author No Posts
-              .post-content
-                p This user has no posts yet
-        
-        // RIGHT COLUMN: INTERESTS & SKILLS
-        .interests-column
-          .section-title Interested In
-          if user && user.interests
-            p= user.interests
-          else
-            p No interests provided
-          
-          .section-title(style="margin-top: 30px;") Skills
-          if user && user.skills
-            p= user.skills
-          else
-            p No skills provided
+              // Interests Card
+              .interests-card
+                h3.card-heading
+                  i.fas.fa-heart
+                  | Interests
+                .card-content
+                  if user && user.interests
+                    p= user.interests
+                  else
+                    p.empty-content No interests provided
+
+              // Skills Card
+              .skills-card
+                h3.card-heading
+                  i.fas.fa-tools
+                  | Skills
+                .card-content
+                  if user && user.skills
+                    p= user.skills
+                  else
+                    p.empty-content No skills provided
+            
+            // RIGHT COLUMN
+            .profile-main
+              .posts-container
+                .posts-header
+                  h2
+                    i.fas.fa-newspaper
+                    | Posts
+                  a.new-post-btn(href="/add_post")
+                    i.fas.fa-plus
+                    | New Post
+                
+                // Posts
+                if posts && posts.length
+                  each post in posts
+                    .post
+                      .post-header
+                        .author-info
+                          img.author-avatar(src=post.author_avatar || "/images/default-avatar.png", alt="Author")
+                          .post-meta
+                            .author-name #{user.name}
+                            .post-date #{post.created_at}
+                      
+                      h3.post-title= post.title
+                      .post-body
+                        p= post.content
+                        if post.image
+                          .post-image-container
+                            img.post-image(src=post.image alt="Post image")
+                      
+                      .post-actions
+                        button.action-button
+                          i.fas.fa-comment
+                          span Comments
+                        button.action-button
+                          i.fas.fa-share
+                          span Share
+                        button.action-button
+                          i.fas.fa-bookmark
+                          span Save
+                else
+                  .empty-posts
+                    i.fas.fa-newspaper
+                    h3 No Posts Yet
+                    p You haven't created any posts yet.
+                    a.create-post-btn(href="/add_post")
+                      i.fas.fa-plus
+                      | Create Your First Post
