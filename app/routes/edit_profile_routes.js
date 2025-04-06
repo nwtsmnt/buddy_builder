@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const editProfileController = require('../controllers/edit_profile_controller'); // Import the controller
 
-// Route for the edit-profile page
-router.get('/edit-profile', (req, res) => {
-    res.render('edit_profile', { title: 'Edit Profile' });
-});
+// GET /profile/edit
+router.get('/edit-profile', editProfileController.getEditProfile);
+
+// POST /profile/edit
+router.post('/edit-profile', editProfileController.updateProfile);
 
 module.exports = router;

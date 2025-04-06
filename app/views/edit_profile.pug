@@ -4,8 +4,28 @@ block head
   link(rel="stylesheet", href="/css/edit_profile.css")
 
 block content
-    .overlay
-        h1 Edit Profile
-        p This feature will be implemented in a later stage of the application.
-        a.cta-button(href="/") Intro Page
-        a.cta-button(href="/profile") Go back
+  .edit-profile-container
+    h1 Edit Profile
+    form(action="/edit-profile" method="POST")
+      .form-group
+        label(for="name") Name
+        input#name(type="text" name="name" value=user.name required)
+
+      .form-group
+        label(for="details") Details
+        textarea#details(name="details" rows="4")= user.details
+
+      .form-group
+        label(for="interests") Interests
+        textarea#interests(name="interests" rows="4")= user.interests
+
+      .form-group
+        label(for="skills") Skills
+        textarea#skills(name="skills" rows="4")= user.skills
+
+      .form-group
+        label(for="bio") Bio
+        textarea#bio(name="bio" rows="4")= user.bio
+
+      button(type="submit" class="save-button") Save Changes
+      a.cancel-button(href="/profile") Cancel
