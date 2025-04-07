@@ -24,17 +24,36 @@ exports.addComment = async (req, res) => {
 exports.renderNewsfeed = async (req, res) => {
   try {
     const userId = req.session.userId;
-    // Get success or error messages from query parameters
     const success = req.query.success || null;
-    const error = req.query.error || null;
     
-    // Fetch posts with user details
-    const userResult = await db.query("SELECT avatar_url FROM Users WHERE id = ?", [userId]);
+    // Fetch the current user's info
+    const userResult = await db.query("SELECT * FROM Users WHERE id = ?", [userId]);
     const user = userResult.length ? userResult[0] : null;
-    const posts = await db.query("SELECT * FROM Posts ORDER BY created_at DESC");
-    const comments = await db.query("SELECT Comments.*, Users.name AS fullname FROM Comments JOIN Users ON Comments.user_id = Users.id");
     
-    res.render("newsfeed", { user, posts, comments, success, error });
+    // Modified query to join Posts with Users to get author names
+    const posts = await db.query(`
+      SELECT p.*, u.name as author_name, u.avatar_url as author_avatar 
+      FROM Posts p 
+      JOIN Users u ON p.user_id = u.id 
+      ORDER BY p.created_at DESC
+    `);
+    
+    // Format date for each post for better display
+    posts.forEach(post => {
+      // Convert raw date to a formatted string if it exists
+      if (post.created_at) {
+        const date = new Date(post.created_at);
+        post.time = date.toLocaleString();
+      }
+    });
+    
+    const comments = await db.query(`
+      SELECT c.*, u.name AS fullname 
+      FROM Comments c
+      JOIN Users u ON c.user_id = u.id
+    `);
+    
+    res.render("newsfeed", { user, posts, comments, success });
   } catch (error) {
     console.error("Error fetching newsfeed:", error);
     res.render("newsfeed", { error: "An unexpected error occurred. Please try again." });
