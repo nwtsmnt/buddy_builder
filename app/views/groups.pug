@@ -20,10 +20,10 @@ html(lang="en")
           a.nav-link(href="/profile")
             i.fas.fa-user
             span My Profile
-          a.nav-link(href="/chat")
+          a.nav-link.active(href="/chat")
             i.fas.fa-comments
             span Chats
-          a.nav-link.active(href="/groups")
+          a.nav-link(href="/groups")
             i.fas.fa-users
             span Groups
           a.nav-link(href="/add-people")
@@ -41,175 +41,209 @@ html(lang="en")
 
       .main-content
         header.top-bar
-          .search-container
-            i.fas.fa-search
-            input.search-input(type="text" placeholder="Search groups...")
-          .user-menu
-            .profile-menu
-              img.avatar(src="/images/default-avatar.png" alt="Profile")
-              span.username User
+          h1.page-title 
+            i.fas.fa-users
+            | Groups
+          button.create-group-btn(onclick="toggleCreateGroupModal()")
+            i.fas.fa-plus
+            | Create Group
 
-        .scrollable-content
-          .groups-content
-            if error
-              p.error-message(style="color: red; text-align: center;")= error
-            .my-groups-sidebar
-              .sidebar-header
-                h3 My Groups
-                button.create-group-btn
-                  i.fas.fa-plus
-                  span Create Group
-              
-              .groups-list
-                each val in [1, 2, 3, 4, 5]
-                  .group-item(class=val === 1 ? 'active' : '')
-                    .group-icon
-                      if val % 2 === 0
-                        i.fas.fa-graduation-cap
-                      else if val % 3 === 0
-                        i.fas.fa-flask
-                      else
-                        i.fas.fa-calculator
-                    .group-info
-                      .group-name CS#{val}01 - Study Group
-                      .group-members
+        .groups-layout
+          // Enhanced Filter Sidebar
+          .left-sidebar
+            h2.sidebar-title Find Your Group
+            .filter-section
+              h3.filter-title Categories
+              .filter-options
+                .filter-option
+                  input(type="checkbox" id="math")
+                  label(for="math") Mathematics
+                .filter-option
+                  input(type="checkbox" id="science")
+                  label(for="science") Science & Research
+                .filter-option
+                  input(type="checkbox" id="programming")
+                  label(for="programming") Programming
+                .filter-option
+                  input(type="checkbox" id="literature")
+                  label(for="literature") Literature & Writing
+                .filter-option
+                  input(type="checkbox" id="language")
+                  label(for="language") Language Learning
+            
+            .filter-section
+              h3.filter-title Group Size
+              .filter-options
+                .filter-option
+                  input(type="radio" name="size" id="small")
+                  label(for="small") Small (1-10)
+                .filter-option
+                  input(type="radio" name="size" id="medium")
+                  label(for="medium") Medium (11-30)
+                .filter-option
+                  input(type="radio" name="size" id="large")
+                  label(for="large") Large (31+)
+            
+            .filter-section
+              h3.filter-title Activity Level
+              .filter-options
+                .filter-option
+                  input(type="radio" name="activity" id="very-active")
+                  label(for="very-active") Very Active
+                .filter-option
+                  input(type="radio" name="activity" id="active")
+                  label(for="active") Active
+                .filter-option
+                  input(type="radio" name="activity" id="moderate")
+                  label(for="moderate") Moderate
+            
+            button.apply-filters-btn
+              i.fas.fa-filter
+              | Apply Filters
+            button.reset-filters-btn
+              i.fas.fa-undo
+              | Reset Filters
+
+          .main-groups
+            // Featured Group Banner
+            .featured-group-banner
+              .featured-content
+                h2 Join Our Featured Group
+                p Advanced Mathematics Study Circle - Connect with math enthusiasts and problem solvers!
+                .featured-stats
+                  span
+                    i.fas.fa-users
+                    | 128 Members
+                  span
+                    i.fas.fa-chart-line
+                    | Very Active
+              .featured-actions
+                button.join-featured-btn Join Group
+
+            h2.section-title Popular Groups
+            .groups-grid
+              - 
+                var groups = [
+                  { id: 1, name: 'Data Science Explorers', description: 'Explore data analytics, machine learning and statistics together', members: 42, category: 'Science', activity: 'Very Active', color: 'bg-1' },
+                  { id: 2, name: 'Algorithm Masters', description: 'Practice algorithms and prepare for coding interviews', members: 28, category: 'Programming', activity: 'Active', color: 'bg-2' },
+                  { id: 3, name: 'Physics Problem Solvers', description: 'Tackle challenging physics problems from mechanics to quantum', members: 35, category: 'Science', activity: 'Active', color: 'bg-3' },
+                  { id: 4, name: 'Creative Writing Circle', description: 'Share your writing, get feedback, and grow as a writer', members: 24, category: 'Literature', activity: 'Moderate', color: 'bg-4' },
+                  { id: 5, name: 'Web Development Hub', description: 'Learn and collaborate on web development projects', members: 51, category: 'Programming', activity: 'Very Active', color: 'bg-5' },
+                  { id: 6, name: 'Calculus Study Group', description: 'Master calculus concepts together through practice problems', members: 19, category: 'Mathematics', activity: 'Active', color: 'bg-1' }
+                ];
+              each group, index in groups
+                .group-card
+                  .group-card-header(class=group.color)
+                    .group-category #{group.category}
+                    .group-activity
+                      i.fas.fa-bolt
+                      | #{group.activity}
+                  .group-card-content
+                    h3.group-name #{group.name}
+                    p.group-description #{group.description}
+                    .group-stats
+                      span.members-count
                         i.fas.fa-users
-                        span #{val * 5} members
-                    if val % 4 === 0
-                      .unread-badge 3
-              
-              .joined-categories
-                h4 Categories
-                .category-tags
-                  .category-tag Math
-                  .category-tag Science
-                  .category-tag Programming
-                  .category-tag Literature
-                  .category-tag History
-            
-            .main-group-area
-              .featured-group-banner
-                .featured-group-info
-                  h2 Welcome to Groups
-                  p Connect with fellow students, join study groups, and collaborate on projects.
-                .featured-actions
-                  button.banner-btn
-                    i.fas.fa-compass
-                    span Discover Groups
-              
-              .content-tabs
-                .tab.active Discover
-                .tab Your Groups
-                .tab Recommended
-                .tab Trending
-              
-              .groups-grid
-                each val in [1, 2, 3, 4, 5, 6]
-                  .group-card
-                    .group-card-header(class=`bg-${val % 5 + 1}`)
-                      .group-privacy
-                        i.fas.fa-globe
-                      .group-members-count #{val * 13} members
-                    
-                    .group-card-content
-                      .group-avatar
-                        if val % 3 === 0
-                          i.fas.fa-flask
-                        else if val % 2 === 0
-                          i.fas.fa-code
-                        else
-                          i.fas.fa-book
-                      h3.group-card-title #{['Physics', 'Programming', 'Calculus', 'Literature', 'Chemistry', 'History'][val % 6]} Study Group
-                      p.group-card-description A group dedicated to helping each other master #{['Physics', 'Programming', 'Calculus', 'Literature', 'Chemistry', 'History'][val % 6]} concepts and ace exams.
-                    
-                    .group-card-footer
-                      .group-activity
-                        i.fas.fa-bolt
-                        span Active
-                      button.join-btn Join Group
-              
-              .pagination
-                button.pagination-btn.prev
-                  i.fas.fa-chevron-left
-                .pagination-pages
-                  .page-number.active 1
-                  .page-number 2
-                  .page-number 3
-                button.pagination-btn.next
-                  i.fas.fa-chevron-right
-            
-            .group-recommendations
-              .rec-header
-                h3 Recommended for You
-                button.refresh-btn
-                  i.fas.fa-sync-alt
-              
-              .rec-items
-                each val in [1, 2, 3, 4]
-                  .rec-group
-                    .rec-icon
-                      if val % 2 === 0
-                        i.fas.fa-laptop-code
-                      else
-                        i.fas.fa-chart-line
-                    .rec-info
-                      h4 #{['Data Science', 'Web Development', 'Statistics', 'Mobile Apps'][val - 1]} Group
-                      .rec-details #{val * 7} members • Active
-                    button.quick-join-btn
-                      i.fas.fa-plus
-              
-              .trending-topics
-                h4 Trending Topics
-                ul.topic-list
-                  li.topic-item
-                    span.topic-name #FinalExams
-                    span.topic-count 256 groups
-                  li.topic-item
-                    span.topic-name #ProjectCollaboration
-                    span.topic-count 189 groups
-                  li.topic-item
-                    span.topic-name #ResearchPapers
-                    span.topic-count 142 groups
-                  li.topic-item
-                    span.topic-name #StudyAbroad
-                    span.topic-count 98 groups
+                        | #{group.members} Members
+                    .group-actions
+                      button.join-btn(onclick=`joinGroup(${group.id}, '${group.name}')`)
+                        i.fas.fa-plus
+                        | Join
+                      button.view-details-btn(onclick=`viewGroup(${group.id})`)
+                        i.fas.fa-info-circle
+                        | View Details
 
-          .create-group-modal
-            .modal-content
-              .modal-header
-                h2 Create New Study Group
-                button.close-modal
-                  i.fas.fa-times
-              form.create-group-form
-                .form-group
-                  label(for="group-name") Group Name
-                  input#group-name(type="text" placeholder="Enter a name for your group")
-                
-                .form-group
-                  label(for="group-category") Category
-                  select#group-category
-                    option(value="" disabled selected) Select a category
-                    option(value="math") Mathematics
-                    option(value="science") Science
-                    option(value="programming") Programming
-                    option(value="literature") Literature
-                    option(value="history") History
-                    option(value="other") Other
-                
-                .form-group
-                  label(for="group-description") Description
-                  textarea#group-description(placeholder="Describe what your group is about")
-                
-                .form-group
-                  label Privacy
-                  .toggle-options
-                    .toggle-option
-                      input#public-option(type="radio" name="privacy" value="public" checked)
-                      label(for="public-option") Public
-                    .toggle-option
-                      input#private-option(type="radio" name="privacy" value="private")
-                      label(for="private-option") Private
-                
-                .form-actions
-                  button.cancel-btn(type="button") Cancel
-                  button.create-btn(type="submit") Create Group
+          .right-sidebar
+            h2.sidebar-title Suggested For You
+            - 
+              var suggestions = [
+                { id: 7, name: 'Spanish Language Learners', members: 15 },
+                { id: 8, name: 'Machine Learning Beginners', members: 32 },
+                { id: 9, name: 'Discrete Mathematics', members: 23 }
+              ];
+            each suggestion in suggestions
+              .suggestion-card
+                h3.suggestion-name #{suggestion.name}
+                .suggestion-meta
+                  span
+                    i.fas.fa-users
+                    | #{suggestion.members} Members
+                button.quick-join-btn(onclick=`joinGroup(${suggestion.id}, '${suggestion.name}')`) Join
+
+            h2.sidebar-title Your Groups
+            - 
+              var yourGroups = [
+                { id: 10, name: 'Linear Algebra Study', unread: 5 },
+                { id: 11, name: 'Python Programmers', unread: 0 }
+              ];
+            if yourGroups && yourGroups.length
+              each group in yourGroups
+                .your-group
+                  h3.group-name #{group.name}
+                  if group.unread > 0
+                    span.unread-badge #{group.unread}
+                  button.visit-group-btn(onclick=`viewGroup(${group.id})`) Visit
+            else
+              p.no-groups You haven't joined any groups yet.
+            
+            h2.sidebar-title Trending Topics
+            .trending-topics
+              span.topic #DataScience
+              span.topic #Calculus
+              span.topic #AlgorithmDesign
+              span.topic #CreativeWriting
+
+    // Create Group Modal
+    .modal.hidden#create-group-modal
+      .modal-content
+        .modal-header
+          h2 Create New Group
+          button.close-modal(onclick="toggleCreateGroupModal()") &times;
+        form.create-group-form(action="/groups/create" method="POST")
+          .form-group
+            label(for="group-name") Group Name
+            input#group-name(type="text" name="name" placeholder="Enter group name" required)
+          
+          .form-group
+            label(for="group-category") Category
+            select#group-category(name="category" required)
+              option(value="" selected disabled) Select a category
+              option(value="mathematics") Mathematics
+              option(value="science") Science & Research
+              option(value="programming") Programming
+              option(value="literature") Literature & Writing
+              option(value="language") Language Learning
+              option(value="other") Other
+          
+          .form-group
+            label(for="group-description") Description
+            textarea#group-description(name="description" placeholder="Describe what your group is about" rows="3")
+          
+          .form-group
+            label Group Privacy
+            .radio-options
+              .radio-option
+                input#public-group(type="radio" name="privacy" value="public" checked)
+                label(for="public-group") Public (Anyone can join)
+              .radio-option
+                input#private-group(type="radio" name="privacy" value="private")
+                label(for="private-group") Private (By invitation only)
+          
+          .form-actions
+            button.cancel-btn(type="button" onclick="toggleCreateGroupModal()") Cancel
+            button.submit-btn(type="submit") Create Group
+
+    script.
+      function toggleCreateGroupModal() {
+        const modal = document.getElementById('create-group-modal');
+        modal.classList.toggle('hidden');
+      }
+
+      function joinGroup(groupId, groupName) {
+        // Here you'd add AJAX code to join the group
+        alert(`You've successfully joined the "${groupName}" group!`);
+      }
+
+      function viewGroup(groupId) {
+        window.location.href = `/group/${groupId}`;
+      }
