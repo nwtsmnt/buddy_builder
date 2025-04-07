@@ -58,8 +58,7 @@ html(lang="en")
             if error
               .error-message(style="color: red; background-color: #f7e7e7; padding: 10px; border-radius: 5px; margin-bottom: 15px;")= error
             
-            form.post-form(action="/add_post" method="POST")
-              // Remove enctype="multipart/form-data" temporarily for testing
+            form.post-form(action="/add_post" method="POST" enctype="multipart/form-data")
               .form-group
                 label.form-label(for="post-title") 
                   i.fas.fa-heading
@@ -99,7 +98,7 @@ html(lang="en")
                   i.fas.fa-paperclip
                   | Attachments
                 .file-upload
-                  input#post-attachments.file-input(type="file" name="attachments" multiple)
+                  input#post-attachments.file-input(type="file" name="image" accept="image/*")
                   .upload-placeholder
                     i.fas.fa-cloud-upload-alt
                     span Drag & drop files or click to upload

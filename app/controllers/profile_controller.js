@@ -1,4 +1,17 @@
+const multer = require('multer');
+const path = require('path');
 const db = require('../models/db');
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../public/uploads'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+const upload = multer({ storage });
 
 exports.getProfile = async (req, res) => {
   try {
@@ -47,3 +60,46 @@ exports.renderProfile = async (req, res) => {
     res.render("profile", { error: "An unexpected error occurred. Please try again." });
   }
 };
+
+exports.updateProfile = [
+  upload.single('avatar'), // Middleware to handle file upload
+  async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      const { name, details, bio, interests, skills } = req.body;
+      const avatar = req.file ? `/uploads/${req.file.filename}` : null;
+
+      // Debugging logs
+      console.log('Form data received:', req.body);
+      console.log('Uploaded file:', req.file);
+
+      // Validate required fields
+      if (!name) {
+        throw new Error("Name is required.");
+      }
+
+      // Update the user's profile in the database
+      const updateQuery = `
+        UPDATE Users
+        SET 
+          name = ?, 
+          details = ?, 
+          bio = ?, 
+          interests = ?, 
+          skills = ?, 
+          avatar_url = COALESCE(?, avatar_url)
+        WHERE id = ?
+      `;
+      await db.query(updateQuery, [name, details, bio, interests, skills, avatar, userId]);
+
+      console.log('Profile updated successfully.');
+      res.redirect('/profile?success=Profile+updated+successfully');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      res.render('edit_profile', {
+        error: error.message || 'Error updating profile. Please try again.',
+        user: req.body,
+      });
+    }
+  },
+];

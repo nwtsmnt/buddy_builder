@@ -48,6 +48,8 @@ html(lang="en")
             .profile-menu
               if error
                 p.error-message(style="color: red;")= error
+              if success
+                p.success-message(style="color: green;")= success
               if user && user.avatar_url
                 img.avatar(src=user.avatar_url alt="Profile")
               else
@@ -55,6 +57,10 @@ html(lang="en")
               span.username #{user ? user.name : 'User'}
 
         .content-area
+          if success
+            .success-message(style="color: green; background-color: #e7f7e7; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;")= success
+          if error
+            .error-message(style="color: red; background-color: #f7e7e7; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;")= error
           .page-header
             h1.page-title 
               i.fas.fa-user
@@ -129,12 +135,12 @@ html(lang="en")
                 .posts-header
                   h2
                     i.fas.fa-newspaper
-                    | Posts
+                    | My Posts
                   a.new-post-btn(href="/add_post")
                     i.fas.fa-plus
                     | New Post
                 
-                // Posts
+                // Display user's posts
                 if posts && posts.length
                   each post in posts
                     .post
@@ -150,7 +156,7 @@ html(lang="en")
                         p= post.content
                         if post.image
                           .post-image-container
-                            img.post-image(src=post.image alt="Post image")
+                            img.post-image(src=post.image, alt="Post image")
                       
                       .post-actions
                         button.action-button

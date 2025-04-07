@@ -2,6 +2,17 @@ const db = require('../models/db');
 const multer = require('multer');
 const path = require('path');
 
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../public/uploads'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+const upload = multer({ storage });
+
 exports.addComment = async (req, res) => {
   try {
     const userId = req.session.userId; // Use the logged-in user's ID from the session
@@ -76,83 +87,63 @@ exports.renderAddPost = async (req, res) => {
   }
 };
 
-exports.addPost = async (req, res) => {
+exports.addPost = [
+  upload.single('image'), // Middleware to handle file upload
+  async (req, res) => {
+    try {
+      const { title, content, category } = req.body;
+      const userId = req.session.userId;
+      const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+      if (!userId || !title || !content || !category) {
+        return res.render('add_post', {
+          error: 'All fields are required.',
+          formData: req.body,
+        });
+      }
+
+      // Insert the post into the database
+      await db.query(
+        'INSERT INTO Posts (title, content, category, image, user_id) VALUES (?, ?, ?, ?, ?)',
+        [title, content, category, image, userId]
+      );
+
+      res.redirect('/newsfeed?success=Post+successfully+added');
+    } catch (error) {
+      console.error('Error adding post:', error);
+      res.render('add_post', {
+        error: 'An unexpected error occurred.',
+        formData: req.body,
+      });
+    }
+  },
+];
+
+exports.renderProfile = async (req, res) => {
   try {
-    // Add detailed debugging
-    console.log("========= REQUEST BODY =========");
-    console.log(req.body);
-    console.log("===============================");
-    
-    // Check if req.body exists
-    if (!req.body) {
-      console.error("Request body is undefined or null");
-      return res.render("add_post", { 
-        error: "No form data received. Please try again.",
-        formData: {} 
-      });
-    }
-    
-    const title = req.body.title;
-    const content = req.body.content;
-    const category = req.body.category;
     const userId = req.session.userId;
-    
-    // Log each field separately for debugging
-    console.log("Title:", title);
-    console.log("Content:", content);
-    console.log("Category:", category);
-    console.log("User ID:", userId);
-    
-    if (!userId) {
-      return res.render("add_post", { 
-        error: "You must be logged in to create a post.",
-        formData: req.body 
-      });
+
+    // Fetch the user's profile information
+    const userResult = await db.query("SELECT * FROM Users WHERE id = ?", [userId]);
+    const user = userResult.length ? userResult[0] : null;
+
+    if (!user) {
+      return res.redirect('/login');
     }
-    
-    // Try direct value check rather than empty string check
-    if (!title) {
-      console.log("Title is falsy");
-      return res.render("add_post", { 
-        error: "Title cannot be empty.", 
-        formData: req.body 
-      });
-    }
-    
-    if (!content) {
-      console.log("Content is falsy");
-      return res.render("add_post", { 
-        error: "Content cannot be empty.", 
-        formData: req.body 
-      });
-    }
-    
-    if (!category) {
-      console.log("Category is falsy");
-      return res.render("add_post", { 
-        error: "Please select a category.", 
-        formData: req.body 
-      });
-    }
-    
-    console.log("All validations passed, inserting post");
-    
-    // Insert the post into the database
-    await db.query(
-      "INSERT INTO Posts (title, content, category, user_id) VALUES (?, ?, ?, ?)",
-      [title, content, category, userId]
-    );
-    
-    console.log("Post inserted successfully");
-    
-    // Redirect to newsfeed with success message
-    return res.redirect("/newsfeed?success=Post+successfully+added");
+
+    // Fetch posts created by the user
+    const posts = await db.query(`
+      SELECT p.*, u.avatar_url as author_avatar 
+      FROM Posts p
+      JOIN Users u ON p.user_id = u.id
+      WHERE p.user_id = ?
+      ORDER BY p.created_at DESC
+    `, [userId]);
+
+    // Render the profile page with user details and posts
+    res.render('profile', { user, posts });
   } catch (error) {
-    console.error("Error adding post:", error);
-    
-    return res.render("add_post", { 
-      error: "An unexpected error occurred: " + error.message,
-      formData: req.body
-    });
+    console.error('Error rendering profile:', error);
+    res.render('profile', { error: 'An unexpected error occurred. Please try again.' });
   }
 };

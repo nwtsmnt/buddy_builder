@@ -1,4 +1,17 @@
 const db = require('../models/db');
+const multer = require('multer');
+const path = require('path');
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '../public/uploads'));
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+const upload = multer({ storage });
 
 // Render the Edit Profile page
 exports.getEditProfile = async (req, res) => {
@@ -21,20 +34,45 @@ exports.getEditProfile = async (req, res) => {
 };
 
 // Handle profile updates
-exports.updateProfile = async (req, res) => {
-  try {
-    const userId = req.session.userId;
-    const { name, details, interests, skills, bio } = req.body;
+exports.updateProfile = [
+  upload.single('avatar'), // Middleware to handle file upload
+  async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      const { name, details, interests, skills, bio } = req.body;
+      const avatar = req.file ? `/uploads/${req.file.filename}` : null;
 
-    // Update the user's profile in the database
-    await db.query(
-      'UPDATE Users SET name = ?, details = ?, interests = ?, skills = ?, bio = ? WHERE id = ?',
-      [name, details, interests, skills, bio, userId]
-    );
+      // Debugging logs
+      console.log('Form data received:', req.body);
+      console.log('Uploaded file:', req.file);
 
-    res.redirect('/profile'); // Redirect back to the profile page
-  } catch (err) {
-    console.error('Error updating profile:', err);
-    res.status(500).send('Error updating profile.');
-  }
-};
+      // Validate required fields
+      if (!name) {
+        throw new Error("Name is required.");
+      }
+
+      // Update the user's profile in the database
+      const updateQuery = `
+        UPDATE Users
+        SET 
+          name = ?, 
+          details = ?, 
+          interests = ?, 
+          skills = ?, 
+          bio = ?, 
+          avatar_url = COALESCE(?, avatar_url)
+        WHERE id = ?
+      `;
+      await db.query(updateQuery, [name, details, interests, skills, bio, avatar, userId]);
+
+      console.log('Profile updated successfully.');
+      res.redirect('/profile?success=Profile+updated+successfully');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      res.render('edit_profile', {
+        error: error.message || 'Error updating profile. Please try again.',
+        user: req.body,
+      });
+    }
+  },
+];

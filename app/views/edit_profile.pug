@@ -80,34 +80,28 @@ html(lang="en")
 
               // Form Fields
               .form-group
-                label.form-label(for="name")
-                  i.fas.fa-user
-                  | Name
-                input#name.form-input(type="text" name="name" value=user.name required)
+                label(for="name") Name
+                input#name(type="text" name="name" value=user.name required)
 
               .form-group
-                label.form-label(for="details")
-                  i.fas.fa-info-circle
-                  | Details
-                textarea#details.form-input(name="details" rows="4" placeholder="Add some details about yourself")= user.details
+                label(for="details") Details
+                textarea#details(name="details" rows="4")= user.details
 
               .form-group
-                label.form-label(for="bio")
-                  i.fas.fa-comment
-                  | Bio
-                textarea#bio.form-input(name="bio" rows="4" placeholder="Write a short bio")= user.bio
+                label(for="bio") Bio
+                textarea#bio(name="bio" rows="4")= user.bio
 
               .form-group
-                label.form-label(for="interests")
-                  i.fas.fa-heart
-                  | Interests
-                textarea#interests.form-input(name="interests" rows="4" placeholder="What are you interested in?")= user.interests
+                label(for="interests") Interests
+                textarea#interests(name="interests" rows="4")= user.interests
 
               .form-group
-                label.form-label(for="skills")
-                  i.fas.fa-tools
-                  | Skills
-                textarea#skills.form-input(name="skills" rows="4" placeholder="What skills do you have?")= user.skills
+                label(for="skills") Skills
+                textarea#skills(name="skills" rows="4")= user.skills
+
+              .form-group
+                label(for="avatar") Profile Picture
+                input#avatar(type="file" name="avatar" accept="image/*")
 
               // Action Buttons
               .action-buttons
