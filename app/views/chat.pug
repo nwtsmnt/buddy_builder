@@ -46,8 +46,11 @@ html(lang="en")
             input.search-input(type="text" placeholder="Search conversations...")
           .user-menu
             .profile-menu
-              img.avatar(src="/images/default-avatar.png" alt="Profile")
-              span.username User
+              if user && user.avatar_url
+                img.avatar(src=user.avatar_url alt="Profile")
+              else
+                img.avatar(src="/images/default-avatar.png" alt="Default Profile Picture")
+              span.username #{user ? user.name : 'User'}
 
         .chat-content
           .chat-sidebar
