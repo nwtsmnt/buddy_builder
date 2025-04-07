@@ -14,12 +14,21 @@ html(lang="en")
           i.fas.fa-graduation-cap
           span Study Buddies
         .nav-links
+          a.nav-link.active(href="/newsfeed")
+            i.fas.fa-home
+            span Home
           a.nav-link(href="/profile")
             i.fas.fa-user
             span My Profile
           a.nav-link(href="/chat")
             i.fas.fa-comments
             span Chats
+          a.nav-link(href="/groups")
+            i.fas.fa-users
+            span Groups
+          a.nav-link(href="/add-people")
+            i.fas.fa-user-plus
+            span Add People
           a.nav-link(href="/add_post")
             i.fas.fa-plus-circle
             span Add Post
@@ -47,10 +56,20 @@ html(lang="en")
               span.username #{user ? user.name : 'User'}
 
         .content-area
+          if flash && flash.success
+            p.flash-message(style="color: green; text-align: center;")= flash.success
+          if flash && flash.error
+            p.flash-message(style="color: red; text-align: center;")= flash.error
+          if success
+            .success-message(style="color: green; background-color: #e7f7e7; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;")= success
+          if error
+            .error-message(style="color: red; background-color: #f7e7e7; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;")= error
           .page-header
             h1.page-title 
               i.fas.fa-newspaper
               | Newsfeed
+            if error
+              p.error-message(style="color: red; text-align: center;")= error
 
           .posts-container
             if posts && posts.length
@@ -97,3 +116,48 @@ html(lang="en")
               | #{group.name}
         else
           p.no-groups No groups available
+
+    script.
+      // Hide the success message after 3 seconds
+      const successMessage = document.querySelector(".success-message");
+      if (successMessage) {
+        setTimeout(() => {
+          successMessage.style.display = "none";
+        }, 3000);
+      }
+
+      // Hide flash messages after 3 seconds
+      const flashMessages = document.querySelectorAll(".flash-message");
+      flashMessages.forEach((message) => {
+        setTimeout(() => {
+          message.style.display = "none";
+        }, 3000);
+      });
+
+      // Auto-hide success and error messages after 3 seconds
+      document.addEventListener('DOMContentLoaded', function() {
+        const messages = document.querySelectorAll('.success-message, .error-message');
+        messages.forEach(message => {
+          setTimeout(() => {
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+              message.style.display = 'none';
+            }, 500);
+          }, 3000);
+        });
+      });
+
+      // Auto-hide success messages after 3 seconds
+      document.addEventListener('DOMContentLoaded', function() {
+        const successMessage = document.querySelector('.success-message');
+        if (successMessage) {
+          setTimeout(() => {
+            successMessage.style.opacity = '0';
+            successMessage.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+              successMessage.style.display = 'none';
+            }, 500);
+          }, 3000);
+        }
+      });

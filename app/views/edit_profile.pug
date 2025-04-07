@@ -1,31 +1,119 @@
-extends layout
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Study Buddies - Edit Profile
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
+    link(rel="stylesheet", href="/css/edit_profile.css")
 
-block head
-  link(rel="stylesheet", href="/css/edit_profile.css")
+  body
+    .app-container
+      nav.sidebar
+        .logo
+          i.fas.fa-graduation-cap
+          span Study Buddies
+        .nav-links
+          a.nav-link(href="/newsfeed")
+            i.fas.fa-home
+            span Home
+          a.nav-link(href="/profile")
+            i.fas.fa-user
+            span My Profile
+          a.nav-link(href="/chat")
+            i.fas.fa-comments
+            span Chats
+          a.nav-link(href="/groups")
+            i.fas.fa-users
+            span Groups
+          a.nav-link(href="/add-people")
+            i.fas.fa-user-plus
+            span Add People
+          a.nav-link(href="/add_post")
+            i.fas.fa-plus-circle
+            span Add Post
+          a.nav-link(href="/about-us")
+            i.fas.fa-info-circle
+            span About Us
+          a.nav-link(href="/logout")
+            i.fas.fa-sign-out-alt
+            span Log Out
 
-block content
-  .edit-profile-container
-    h1 Edit Profile
-    form(action="/edit-profile" method="POST")
-      .form-group
-        label(for="name") Name
-        input#name(type="text" name="name" value=user.name required)
+      .main-content
+        header.top-bar
+          .search-container
+            i.fas.fa-search
+            input.search-input(type="text" placeholder="Search...")
+          .user-menu
+            .profile-menu
+              if user && user.avatar_url
+                img.avatar(src=user.avatar_url alt="Profile")
+              else
+                img.avatar(src="/images/default-avatar.png" alt="Default Profile Picture")
+              span.username #{user ? user.name : 'User'}
 
-      .form-group
-        label(for="details") Details
-        textarea#details(name="details" rows="4")= user.details
+        .content-area
+          .page-header
+            h1.page-title 
+              i.fas.fa-edit
+              | Edit Profile
+            button.back-btn(onclick="history.back()")
+              i.fas.fa-arrow-left
+              | Back to Profile
 
-      .form-group
-        label(for="interests") Interests
-        textarea#interests(name="interests" rows="4")= user.interests
+          .edit-profile-container
+            form.edit-profile-form(action="/edit-profile" method="POST" enctype="multipart/form-data")
+              // Profile Picture Section
+              .profile-picture-section
+                h3.section-title 
+                  i.fas.fa-camera
+                  | Profile Picture
+                .profile-picture-wrapper
+                  if user && user.avatar_url
+                    img.profile-picture(src=user.avatar_url alt="Profile Picture")
+                  else
+                    img.profile-picture(src="/images/default-avatar.png" alt="Default Profile Picture")
+                  label.upload-button(for="profile-picture")
+                    i.fas.fa-upload
+                    | Change Picture
+                  input#profile-picture(type="file" name="avatar" accept="image/*" hidden)
 
-      .form-group
-        label(for="skills") Skills
-        textarea#skills(name="skills" rows="4")= user.skills
+              // Form Fields
+              .form-group
+                label.form-label(for="name")
+                  i.fas.fa-user
+                  | Name
+                input#name.form-input(type="text" name="name" value=user.name required)
 
-      .form-group
-        label(for="bio") Bio
-        textarea#bio(name="bio" rows="4")= user.bio
+              .form-group
+                label.form-label(for="details")
+                  i.fas.fa-info-circle
+                  | Details
+                textarea#details.form-input(name="details" rows="4" placeholder="Add some details about yourself")= user.details
 
-      button(type="submit" class="save-button") Save Changes
-      a.cancel-button(href="/profile") Cancel
+              .form-group
+                label.form-label(for="bio")
+                  i.fas.fa-comment
+                  | Bio
+                textarea#bio.form-input(name="bio" rows="4" placeholder="Write a short bio")= user.bio
+
+              .form-group
+                label.form-label(for="interests")
+                  i.fas.fa-heart
+                  | Interests
+                textarea#interests.form-input(name="interests" rows="4" placeholder="What are you interested in?")= user.interests
+
+              .form-group
+                label.form-label(for="skills")
+                  i.fas.fa-tools
+                  | Skills
+                textarea#skills.form-input(name="skills" rows="4" placeholder="What skills do you have?")= user.skills
+
+              // Action Buttons
+              .action-buttons
+                button.btn.btn-secondary(type="button" onclick="history.back()")
+                  i.fas.fa-times
+                  | Cancel
+                button.btn.btn-primary(type="submit")
+                  i.fas.fa-save
+                  | Save Changes

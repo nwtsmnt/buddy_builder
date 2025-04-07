@@ -1,20 +1,49 @@
-extends layout
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Welcome to Study Buddies
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
+    link(rel="stylesheet", href="/css/intro.css")
 
-block head
-  link(rel="stylesheet", href="/css/styles.css")
+  body
+    .intro-container
+      .intro-header
+        .logo
+          i.fas.fa-graduation-cap
+          span Study Buddies
+        nav.nav-links
+          a.nav-link(href="/auth/login") Log In
+          a.nav-link.primary(href="/auth/signup") Sign Up
 
-block content
-  .overlay
-    header
-      h1 Study Buddies
-      p Empowering Students, Together.
-    main
-      section#about-us
-        h2 About Us
-        p Study Buddies is a collaborative platform designed to connect students with study buddies, share resources, and excel in academics. Whether you're prepping for exams, working on projects, or just looking for peer support, Study Buddies has got your back!
-      section#cta
-        h2 Login & Sign-Up
-        p Prompt for new users to register or existing users to log in.
-        .buttons
-          a.cta-button(href='/auth/login') Log In
-          a.cta-button(href='/auth/signup') Sign Up
+      .intro-main
+        .intro-content
+          if error
+            p.error-message(style="color: red; text-align: center;")= error
+          h1 Welcome to Study Buddies
+          p 
+            | Empowering learners worldwide to connect, collaborate, and achieve their goals. Join a vibrant community of students and professionals today.
+          a.cta-button(href="/auth/signup") Get Started
+
+        .intro-image
+          img(src="/images/intro-banner.jpg" alt="Study Buddies Banner")
+
+      .features-section
+        h2 Why Choose Study Buddies?
+        .features-grid
+          .feature-card
+            i.fas.fa-users.feature-icon
+            h3 Connect
+            p Build meaningful connections with learners and professionals worldwide.
+          .feature-card
+            i.fas.fa-lightbulb.feature-icon
+            h3 Collaborate
+            p Work together on projects, share knowledge, and grow as a team.
+          .feature-card
+            i.fas.fa-chart-line.feature-icon
+            h3 Achieve
+            p Reach your academic and professional goals with the support of a thriving community.
+
+      .footer
+        p &copy; 2025 Study Buddies. All rights reserved.

@@ -26,6 +26,9 @@ html(lang="en")
           a.nav-link.active(href="/groups")
             i.fas.fa-users
             span Groups
+          a.nav-link(href="/add-people")
+            i.fas.fa-user-plus
+            span Add People
           a.nav-link(href="/add_post")
             i.fas.fa-plus-circle
             span Add Post
@@ -48,6 +51,8 @@ html(lang="en")
 
         .scrollable-content
           .groups-content
+            if error
+              p.error-message(style="color: red; text-align: center;")= error
             .my-groups-sidebar
               .sidebar-header
                 h3 My Groups
