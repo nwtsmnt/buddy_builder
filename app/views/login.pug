@@ -20,6 +20,8 @@ html(lang="en")
         .form-container
           h2 Welcome Back
           p.subtitle Log in to access your account and connect with your study buddies.
+          if error
+            p.error-message(style="color: red;")= error
           form(action="/auth/login" method="POST")
             .form-group
               label(for="email") Email Address

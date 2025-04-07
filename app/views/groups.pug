@@ -51,6 +51,8 @@ html(lang="en")
 
         .scrollable-content
           .groups-content
+            if error
+              p.error-message(style="color: red; text-align: center;")= error
             .my-groups-sidebar
               .sidebar-header
                 h3 My Groups

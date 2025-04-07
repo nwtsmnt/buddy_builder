@@ -19,6 +19,8 @@ html(lang="en")
       .signup-right
         .form-container
           h2 Create Your Account
+          if error
+            p.error-message(style="color: red;")= error
           form(action="/auth/signup" method="POST")
             .form-group
               label(for="name") Name

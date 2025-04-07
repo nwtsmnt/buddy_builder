@@ -55,7 +55,11 @@ html(lang="en")
               | Back
 
           .post-form-container
-            form.post-form(action="/add_post" method="POST" enctype="multipart/form-data")
+            if error
+              .error-message(style="color: red; background-color: #f7e7e7; padding: 10px; border-radius: 5px; margin-bottom: 15px;")= error
+            
+            form.post-form(action="/add_post" method="POST")
+              // Remove enctype="multipart/form-data" temporarily for testing
               .form-group
                 label.form-label(for="post-title") 
                   i.fas.fa-heading
@@ -64,6 +68,7 @@ html(lang="en")
                   type="text" 
                   name="title"
                   placeholder="What's your post about?"
+                  value=formData && formData.title ? formData.title : ""
                   required
                 )
 
@@ -73,21 +78,21 @@ html(lang="en")
                   | Category
                 select#post-category.form-input(name="category" required)
                   option(value="" disabled selected) Select a category
-                  option(value="question") Question
-                  option(value="discussion") Discussion
-                  option(value="resource") Study Resource
-                  option(value="event") Study Event
+                  option(value="question" selected=formData && formData.category === "question") Question
+                  option(value="discussion" selected=formData && formData.category === "discussion") Discussion
+                  option(value="resource" selected=formData && formData.category === "resource") Study Resource
+                  option(value="event" selected=formData && formData.category === "event") Study Event
 
               .form-group
                 label.form-label(for="post-description")
                   i.fas.fa-paragraph
                   | Description
                 textarea#post-description.form-input(
-                  name = "content"
+                  name="content"
                   placeholder="Share your thoughts, questions, or insights..."
                   rows="6"
                   required
-                )
+                )= formData && formData.content ? formData.content : ""
 
               .form-group
                 label.form-label(for="post-attachments")
@@ -100,9 +105,38 @@ html(lang="en")
                     span Drag & drop files or click to upload
 
               .action-buttons
-                button.btn.btn-secondary(type="button" onclick="history.back()")
+                // Add console log to debug form data before submitting
+                button.btn.btn-secondary(type="button" onclick="window.location.href='/newsfeed'")
                   i.fas.fa-times
                   | Cancel
-                button.btn.btn-primary(type="submit")
+                button.btn.btn-primary(type="submit" onclick="console.log('Form data:', document.querySelector('.post-form').elements)")
                   i.fas.fa-paper-plane
                   | Publish Post
+
+script.
+  // Add form validation and debugging
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('.post-form');
+    form.addEventListener('submit', function(event) {
+      // Log form data before submission
+      console.log('Form being submitted...');
+      const formData = new FormData(form);
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+      }
+      
+      // Basic validation
+      const title = document.getElementById('post-title').value;
+      const content = document.getElementById('post-description').value;
+      const category = document.getElementById('post-category').value;
+      
+      console.log('Title:', title);
+      console.log('Content:', content);
+      console.log('Category:', category);
+      
+      if (!title || !content || !category) {
+        event.preventDefault();
+        alert('Please fill in all required fields.');
+      }
+    });
+  });

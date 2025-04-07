@@ -19,6 +19,8 @@ html(lang="en")
 
       .intro-main
         .intro-content
+          if error
+            p.error-message(style="color: red; text-align: center;")= error
           h1 Welcome to Study Buddies
           p 
             | Empowering learners worldwide to connect, collaborate, and achieve their goals. Join a vibrant community of students and professionals today.

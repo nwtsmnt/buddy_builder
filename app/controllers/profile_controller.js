@@ -28,3 +28,22 @@ exports.getProfile = async (req, res) => {
     res.status(500).send('Error fetching profile.');
   }
 };
+
+exports.renderProfile = async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) {
+      return res.render("profile", { error: "User not logged in." });
+    }
+
+    const user = await db.query("SELECT * FROM Users WHERE id = ?", [userId]);
+    if (!user.length) {
+      return res.render("profile", { error: "User not found." });
+    }
+
+    res.render("profile", { user: user[0] });
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.render("profile", { error: "An unexpected error occurred. Please try again." });
+  }
+};

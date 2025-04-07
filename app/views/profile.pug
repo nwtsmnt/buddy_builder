@@ -46,6 +46,8 @@ html(lang="en")
             input.search-input(type="text" placeholder="Search...")
           .user-menu
             .profile-menu
+              if error
+                p.error-message(style="color: red;")= error
               if user && user.avatar_url
                 img.avatar(src=user.avatar_url alt="Profile")
               else
