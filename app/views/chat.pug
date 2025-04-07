@@ -6,7 +6,7 @@ html(lang="en")
     title Study Buddies - Chat
     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css")
     link(rel="stylesheet", href="/css/chat.css")
-
+  input#logged-in-user-id(type="hidden" value=userId)
   body
     .app-container
       nav.sidebar
@@ -47,22 +47,11 @@ html(lang="en")
           .chat-sidebar
             .chat-sidebar-header
               h3 Conversations
-              button.new-chat-btn
+              button.new-chat-btn#add-conversation-btn
                 i.fas.fa-plus
 
             .conversation-list
-              each val in [1, 2, 3, 4, 5]
-                .conversation-item(class=val === 1 ? 'active' : '')
-                  .conversation-avatar
-                    img(src=`/images/default-avatar.png` alt="Contact")
-                    .status-indicator(class=val % 2 === 0 ? 'online' : '')
-                  .conversation-info
-                    .conversation-name Contact Name #{val}
-                    .conversation-preview Latest message preview...
-                  .conversation-meta
-                    .conversation-time 12:30 PM
-                    if val % 3 === 0
-                      .unread-badge 2
+              ul#conversation-list
 
           .chat-main
             .chat-header
@@ -82,44 +71,7 @@ html(lang="en")
                   i.fas.fa-ellipsis-v
 
             .messages-container
-              .date-divider
-                span Today
-              
-              .message.received
-                .message-avatar
-                  img(src="/images/default-avatar.png" alt="Avatar")
-                .message-content
-                  .message-bubble Hello! How are you doing today?
-                  .message-time 10:30 AM
-
-              .message.sent
-                .message-content
-                  .message-bubble I'm doing great! Just working on our project. How about you?
-                  .message-time 10:32 AM
-
-              .message.received
-                .message-avatar
-                  img(src="/images/default-avatar.png" alt="Avatar")
-                .message-content
-                  .message-bubble I'm good too! Would you like to meet up to study for the upcoming test?
-                  .message-time 10:33 AM
-
-              .message.sent
-                .message-content
-                  .message-bubble That sounds perfect! When are you free?
-                  .message-time 10:35 AM
-              
-              .message.received
-                .message-avatar
-                  img(src="/images/default-avatar.png" alt="Avatar")
-                .message-content
-                  .message-bubble How about tomorrow at 3 PM in the library?
-                  .message-time 10:37 AM
-
-              .message.sent
-                .message-content
-                  .message-bubble Perfect, I'll see you then!
-                  .message-time 10:38 AM
+              // Messages will be dynamically populated here
 
             .message-composer
               button.attachment-btn
@@ -135,10 +87,8 @@ html(lang="en")
               h3 Study Notes
               button.minimize-btn
                 i.fas.fa-chevron-right
-            
             .notes-content
               textarea.notes-textarea(placeholder="Take notes for your conversation here...")
-            
             .notes-actions
               button.notes-btn.secondary
                 i.fas.fa-trash
@@ -146,3 +96,341 @@ html(lang="en")
               button.notes-btn.primary
                 i.fas.fa-save
                 | Save
+
+        // Add Conversation Modal
+        div#add-conversation-modal.hidden
+          input#user-search-input(type="text" placeholder="Search for users...")
+          ul#user-search-results
+
+script.
+  // Add this function at the beginning of your script block
+  function updateContactHeader(userName, userAvatar) {
+    const contactName = document.querySelector('.contact-name');
+    const contactAvatar = document.querySelector('.contact-avatar');
+    
+    if (contactName) contactName.textContent = userName;
+    if (contactAvatar) contactAvatar.src = userAvatar || '/images/default-avatar.png';
+  }
+  
+  async function loadConversations() {
+    try {
+      const response = await fetch('/chat/conversations');
+      if (!response.ok) throw new Error('Failed to fetch conversations');
+      const conversations = await response.json();
+
+      const conversationList = document.getElementById('conversation-list');
+      conversationList.innerHTML = ''; // Clear existing conversations
+
+      if (conversations.length === 0) {
+        conversationList.innerHTML = '<li class="no-conversations">No conversations yet</li>';
+        return;
+      }
+
+      conversations.forEach(user => {
+        const li = document.createElement('li');
+        li.classList.add('conversation-item');
+        li.dataset.userId = user.id;
+        
+        li.innerHTML = `
+          <div class="conversation-avatar">
+            <img src="${user.avatar_url || '/images/default-avatar.png'}" alt="${user.name}">
+          </div>
+          <div class="conversation-info">
+            <div class="conversation-name">${user.name}</div>
+            <div class="conversation-preview">${user.last_message || 'Start chatting...'}</div>
+          </div>
+        `;
+        
+        li.addEventListener('click', () => {
+          document.querySelectorAll('.conversation-item').forEach(item => item.classList.remove('active'));
+          li.classList.add('active'); // Highlight the active conversation
+          updateContactHeader(user.name, user.avatar_url);
+          loadMessages(user.id);
+        });
+        
+        conversationList.appendChild(li);
+      });
+    } catch (error) {
+      console.error('Error loading conversations:', error);
+      document.getElementById('conversation-list').innerHTML = 
+        '<li class="error">Failed to load conversations</li>';
+    }
+  }
+
+  async function loadMessages(userId) {
+    try {
+      // Get reference to the messages container
+      const messagesContainer = document.querySelector('.messages-container');
+      
+      // Show a loading indicator
+      messagesContainer.innerHTML = '<div class="loading-messages">Loading messages...</div>';
+      
+      // Fetch messages from the backend
+      const response = await fetch(`/chat/messages/${userId}`);
+      if (!response.ok) throw new Error('Failed to fetch messages');
+      const messages = await response.json();
+
+      // Clear the messages container
+      messagesContainer.innerHTML = '';
+
+      console.log(`Displaying ${messages.length} messages`);
+
+      // Handle case with no messages
+      if (messages.length === 0) {
+        messagesContainer.innerHTML = '<div class="no-messages">No messages yet. Start the conversation!</div>';
+        return;
+      }
+
+      // Get the logged-in user ID (from a hidden input or session)
+      const loggedInUserId = document.getElementById('logged-in-user-id').value;
+
+      // Render each message as a bubble
+      messages.forEach(msg => {
+        const messageElement = document.createElement('div');
+        const isSent = parseInt(msg.sender_id) === parseInt(loggedInUserId);
+        messageElement.classList.add('message', isSent ? 'sent' : 'received');
+
+        // Always use the sender's avatar (who wrote the message)
+        const avatarUrl = msg.sender_avatar || '/images/default-avatar.png';
+
+        messageElement.innerHTML = `
+          <div class="message-avatar">
+            <img src="${avatarUrl || '/images/default-avatar.png'}" alt="Avatar">
+          </div>
+          <div class="message-content">
+            <div class="message-bubble">${msg.message}</div>
+            <div class="message-time">${formatTime(new Date(msg.created_at))}</div>
+          </div>
+        `;
+
+        messagesContainer.appendChild(messageElement);
+      });
+
+      // Scroll to the bottom of the messages container
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    } catch (error) {
+      console.error('Error loading messages:', error);
+      document.querySelector('.messages-container').innerHTML = 
+        '<div class="error-message">Failed to load messages</div>';
+    }
+  }
+
+  // Helper function to format timestamps
+  function formatTime(date) {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  async function sendMessage() {
+    const messageInput = document.querySelector('.message-input');
+    const message = messageInput.value.trim();
+    if (!message) return; // Do nothing if the message is empty
+
+    // Get the active conversation
+    const activeConversation = document.querySelector('.conversation-item.active');
+    if (!activeConversation) {
+      alert('Please select a conversation first');
+      return;
+    }
+
+    const receiverId = activeConversation.dataset.userId;
+
+    try {
+      // Send the message to the backend
+      const response = await fetch('/chat/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          receiverId,
+          message,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to send message');
+
+      // Get the newly created message from the backend
+      const newMessage = await response.json();
+
+      // Clear the input field
+      messageInput.value = '';
+
+      // Append the new message to the chat interface
+      const messagesContainer = document.querySelector('.messages-container');
+      const messageElement = document.createElement('div');
+      const isSent = true; // Since this is the sender, the message is always "sent"
+
+      messageElement.classList.add('message', 'sent');
+      messageElement.innerHTML = `
+        <div class="message-avatar">
+          <img src="${newMessage.sender_avatar || '/images/default-avatar.png'}" alt="Avatar">
+        </div>
+        <div class="message-content">
+          <div class="message-bubble">${newMessage.message}</div>
+          <div class="message-time">${formatTime(new Date(newMessage.created_at))}</div>
+        </div>
+      `;
+
+      messagesContainer.appendChild(messageElement);
+
+      // Scroll to the bottom of the messages container
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+      // Update the conversation preview in the sidebar
+      const previewEl = activeConversation.querySelector('.conversation-preview');
+      if (previewEl) {
+        previewEl.textContent = message.length > 25 ? message.substring(0, 25) + '...' : message;
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Failed to send message. Please try again.');
+    }
+  }
+
+  // Hook up send button click event
+  document.querySelector('.send-btn').addEventListener('click', sendMessage);
+
+  // Add 'Enter' key support for the message input
+  document.querySelector('.message-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  const loggedInUserId = !{JSON.stringify(userId)}; // Replace `userId` with the logged-in user's ID from the server
+
+  document.getElementById('add-conversation-btn').addEventListener('click', () => {
+    const modal = document.getElementById('add-conversation-modal');
+    modal.classList.toggle('hidden'); // Show or hide the modal
+  });
+
+  document.getElementById('user-search-input').addEventListener('input', async (event) => {
+    const query = event.target.value.trim();
+    if (!query) {
+      document.getElementById('user-search-results').innerHTML = '';
+      return;
+    }
+
+    try {
+      console.log(`Searching for users matching: "${query}"`);
+      const response = await fetch(`/chat/search-users?query=${encodeURIComponent(query)}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Search failed with status: ${response.status}`);
+      }
+      
+      const users = await response.json();
+      console.log('Search results:', users);
+
+      const resultsList = document.getElementById('user-search-results');
+      resultsList.innerHTML = '';
+
+      if (users.length === 0) {
+        resultsList.innerHTML = '<li class="no-results">No users found</li>';
+        return;
+      }
+
+      users.forEach(user => {
+        const li = document.createElement('li');
+        li.classList.add('user-search-item');
+        li.dataset.userId = user.id;
+        li.innerHTML = `
+          <div class="user-avatar">
+            <img src="${user.avatar_url || '/images/default-avatar.png'}" alt="${user.name}">
+          </div>
+          <div class="user-info">
+            <div class="user-name">${user.name}</div>
+          </div>
+        `;
+        li.addEventListener('click', () => startConversation(user.id, user.name, user.avatar_url));
+        resultsList.appendChild(li);
+      });
+    } catch (error) {
+      console.error('Error searching users:', error);
+      document.getElementById('user-search-results').innerHTML = 
+        '<li class="error">Error searching for users</li>';
+    }
+  });
+
+  async function startConversation(userId, userName, userAvatar) {
+    try {
+      const response = await fetch('/chat/start-conversation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId })
+      });
+
+      if (!response.ok) throw new Error('Failed to start conversation');
+
+      // Add to conversation list if not already there
+      let conversationItem = document.querySelector(`.conversation-item[data-user-id="${userId}"]`);
+      
+      if (!conversationItem) {
+        const conversationList = document.getElementById('conversation-list');
+        const li = document.createElement('li');
+        li.classList.add('conversation-item');
+        li.dataset.userId = userId;
+        
+        li.innerHTML = `
+          <div class="conversation-avatar">
+            <img src="${userAvatar || '/images/default-avatar.png'}" alt="${userName}">
+          </div>
+          <div class="conversation-info">
+            <div class="conversation-name">${userName}</div>
+            <div class="conversation-preview">Start chatting...</div>
+          </div>
+        `;
+        
+        // ADD THIS: Event listener for clicking on the conversation
+        li.addEventListener('click', () => {
+          document.querySelectorAll('.conversation-item').forEach(item => item.classList.remove('active'));
+          li.classList.add('active');
+          updateContactHeader(userName, userAvatar);
+          loadMessages(userId);
+        });
+        
+        conversationList.appendChild(li);
+        conversationItem = li;
+        
+        // Remove "no conversations" message if it exists
+        const noConversations = document.querySelector('.no-conversations');
+        if (noConversations) noConversations.remove();
+      } else {
+        // This else block is new - handle existing conversations
+        conversationItem.addEventListener('click', () => {
+          document.querySelectorAll('.conversation-item').forEach(item => item.classList.remove('active'));
+          conversationItem.classList.add('active');
+          updateContactHeader(userName, userAvatar);
+          loadMessages(userId);
+        });
+      }
+
+      // Simulate click on the conversation item
+      document.querySelectorAll('.conversation-item').forEach(item => item.classList.remove('active'));
+      conversationItem.classList.add('active');
+
+      // Update contact header
+      updateContactHeader(userName, userAvatar);
+      
+      // Load messages (this will show "No messages yet" initially)
+      loadMessages(userId);
+      
+      // Hide the modal
+      document.getElementById('add-conversation-modal').classList.add('hidden');
+    } catch (error) {
+      console.error('Error starting conversation:', error);
+      alert('Failed to start conversation. Please try again.');
+    }
+  }
+
+  // Load conversations on page load
+  loadConversations();
+</script>

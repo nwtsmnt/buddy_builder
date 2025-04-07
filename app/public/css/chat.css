@@ -267,15 +267,18 @@ body {
   display: flex;
   flex-direction: column;
   background-color: #f5f5f5;
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevent outer scrolling */
 }
 
 .chat-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 10px;
   background-color: white;
   border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .chat-contact {
@@ -345,55 +348,33 @@ body {
 
 /* Messages Container */
 .messages-container {
-  flex: 1;
-  padding: 1rem;
-  overflow-y: auto; /* Allow scrolling for messages */
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  height: calc(100% - 120px); /* Account for header and composer */
+  padding: 10px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  height: calc(100vh - 220px); /* Calculate height based on viewport height minus header and composer */
+  max-height: calc(100vh - 220px);
+  flex: 1;
+  background-color: #f5f7fb; /* Light background for messages area */
 }
 
-.date-divider {
-  text-align: center;
-  margin: 1rem 0;
-  position: relative;
-}
-
-.date-divider::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: var(--border-color);
-  z-index: 0;
-}
-
-.date-divider span {
-  background-color: #f5f5f5;
-  padding: 0 0.75rem;
-  font-size: 0.75rem;
-  color: var(--text-light);
-  position: relative;
-  z-index: 1;
-}
-
+/* Message bubble styles */
 .message {
   display: flex;
   align-items: flex-end;
-  margin-bottom: 0.5rem;
+  margin-bottom: 10px;
   max-width: 75%;
 }
 
-.message.received {
-  align-self: flex-start;
+.message.sent {
+  justify-content: flex-end;
+  align-self: flex-end;
+  flex-direction: row-reverse; /* Avatar on the right */
 }
 
-.message.sent {
-  align-self: flex-end;
-  flex-direction: row-reverse;
+.message.received {
+  justify-content: flex-start;
+  align-self: flex-start;
 }
 
 .message-avatar {
@@ -405,42 +386,57 @@ body {
 }
 
 .message.sent .message-avatar {
-  margin-right: 0;
-  margin-left: 0.5rem;
+  margin-left: 0.5rem; /* Add spacing between the avatar and the bubble */
+  margin-right: 0; /* Ensure no margin on the right */
 }
 
 .message-avatar img {
-  width: 100%;
-  height: 100%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
   object-fit: cover;
 }
 
 .message-content {
+  max-width: 70%;
   display: flex;
   flex-direction: column;
 }
 
-.message-bubble {
-  padding: 0.75rem 1rem;
-  border-radius: 18px;
-  max-width: 100%;
-  word-wrap: break-word;
+.message.sent .message-content {
+  text-align: right; /* Align text to the right */
 }
 
-.message.received .message-bubble {
-  background-color: var(--received-msg-bg);
-  border-bottom-left-radius: 4px;
+/* Ensure the message bubble adjusts to the text content */
+.message-bubble {
+  background-color: var(--primary-color); /* Default background color */
+  color: black; /* Ensure all text is black */
+  padding: 15px 20px; /* Add padding for better spacing */
+  border-radius: 15px;
+  max-width: 90%; /* Allow the bubble to take up more space */
+  min-width: 100px; /* Ensure small messages like "Hi" are not too small */
+  word-wrap: break-word; /* Break long words to prevent overflow */
+  white-space: normal; /* Allow text to flow naturally */
+  display: inline-block; /* Ensure the bubble resizes dynamically */
+  text-align: left; /* Align text to the left */
 }
 
 .message.sent .message-bubble {
-  background-color: var(--sent-msg-bg);
-  border-bottom-right-radius: 4px;
+  background-color: lightgray; /* Light gray for sent messages */
+  color: black; /* Black text for readability */
+}
+
+.message.received .message-bubble {
+  background-color: blue; /* Blue for received messages */
+  color: black; /* Black text for readability */
 }
 
 .message-time {
-  font-size: 0.7rem;
-  color: var(--text-light);
-  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: gray;
+  margin-top: 5px;
+  text-align: right;
   align-self: flex-end;
 }
 
@@ -453,9 +449,10 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem;
+  padding: 10px;
   background-color: white;
   border-top: 1px solid var(--border-color);
+  flex-shrink: 0; /* Prevent composer from shrinking */
 }
 
 .attachment-btn, .emoji-btn, .send-btn {
@@ -592,6 +589,69 @@ body {
 .notes-btn:hover {
   opacity: 0.9;
   transform: translateY(-2px);
+}
+
+/* Modal Styles */
+#add-conversation-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+#add-conversation-modal.hidden {
+  display: none;
+}
+
+#user-search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+#user-search-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.user-search-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.user-search-item:hover {
+  background-color: var(--secondary-color);
+}
+
+.user-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.no-results, .error {
+  padding: 10px;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.error {
+  color: #e74c3c;
 }
 
 /* Responsive Design */

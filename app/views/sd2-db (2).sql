@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Mar 20, 2025 at 12:10 AM
+-- Generation Time: Apr 06, 2025 at 10:54 PM
 -- Server version: 9.2.0
 -- PHP Version: 8.2.27
 
@@ -42,7 +42,25 @@ CREATE TABLE `Comments` (
 INSERT INTO `Comments` (`id`, `post_id`, `user_id`, `comment`, `created_at`) VALUES
 (1, 8, 5, 'Nice!', '2025-03-19 23:36:08'),
 (2, 6, 3, 'Love  it ! Thanks <3', '2025-03-19 23:41:12'),
-(3, 4, 4, 'I am even afraid to see what\'s gonna happen in 5 years :D', '2025-03-19 23:43:31');
+(3, 4, 4, 'I am even afraid to see what\'s gonna happen in 5 years :D', '2025-03-19 23:43:31'),
+(4, 14, 1, 'hetewhwe', '2025-04-03 13:52:59'),
+(5, 12, 1, 'now this is what im talking about', '2025-04-03 13:53:18'),
+(6, 15, 1, 'this is my favourite delivery service', '2025-04-03 13:54:19'),
+(7, 15, 1, 'me too', '2025-04-03 14:08:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Messages`
+--
+
+CREATE TABLE `Messages` (
+  `id` int NOT NULL,
+  `sender_id` int NOT NULL,
+  `receiver_id` int NOT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -54,6 +72,7 @@ CREATE TABLE `Posts` (
   `id` int NOT NULL,
   `title` varchar(255) NOT NULL,
   `content` text NOT NULL,
+  `category` enum('question','discussion','resource','event') NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `user_id` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
@@ -63,13 +82,16 @@ CREATE TABLE `Posts` (
 -- Dumping data for table `Posts`
 --
 
-INSERT INTO `Posts` (`id`, `title`, `content`, `image`, `user_id`, `created_at`) VALUES
-(3, 'Tech News', 'Tech is advancing fast with AI breakthroughs, quantum computing, and 6G development. Cloud computing, cybersecurity, and the metaverse are reshaping industries. Companies like Apple, Google, and Tesla drive innovation, while startups push new frontiers in emerging technologies.', '/uploads/tech_news.jpg', 1, '2025-03-17 15:18:36'),
-(4, 'Cybersecurity Trends', 'Cybersecurity is evolving with AI-driven threat detection, zero-trust models, and quantum encryption. Ransomware attacks and supply chain vulnerabilities remain key risks. Organizations prioritize cloud security and regulatory compliance to combat emerging cyber threats.', '/uploads/cyber_trends.png', 3, '2025-03-17 16:00:00'),
-(5, 'Artificial Intelligence Breakthroughs', 'AI is advancing fast with breakthroughs in generative models, robotics, and autonomous systems. GPT models, AI-driven healthcare, and self-learning algorithms are revolutionizing industries. Ethical AI and regulations are key focuses as AI shapes the future of technology. ', '/uploads/ai.jpg', 4, '2025-03-17 16:10:00'),
-(6, 'Gaming Industry Updates', 'The gaming industry is evolving rapidly with new releases, AI-driven innovations, and cloud gaming expansions. Companies like Sony, Microsoft, and Tencent push boundaries, while indie studios thrive. Esports and VR continue to grow, shaping the future of interactive entertainment', '/uploads/gaming_news.jpg', 5, '2025-03-17 16:20:00'),
-(7, 'Health and Wellness Tips', 'Prioritize sleep, stay hydrated, eat nutritious foods, and exercise regularly. Manage stress with mindfulness and deep breathing. Maintain social connections and take breaks for mental well-being. Small, consistent habits lead to a healthier, happier life! ', '/uploads/well_tips.jpg', 2, '2025-03-17 16:30:00'),
-(8, 'Space Exploration', 'Space exploration pushes the boundaries of human knowledge, leading to technological advancements and deeper understanding of the universe. From the Moon landing to Mars rovers and deep-space probes, it fuels innovation, inspires curiosity, and shapes the future of humanity', '/uploads/space.jpg', 1, '2025-03-17 16:40:00');
+INSERT INTO `Posts` (`id`, `title`, `content`, `category`, `image`, `user_id`, `created_at`) VALUES
+(3, 'Tech News', 'Tech is advancing fast with AI breakthroughs, quantum computing, and 6G development. Cloud computing, cybersecurity, and the metaverse are reshaping industries. Companies like Apple, Google, and Tesla drive innovation, while startups push new frontiers in emerging technologies.', 'resource', '/uploads/tech_news.jpg', 1, '2025-03-17 15:18:36'),
+(4, 'Cybersecurity Trends', 'Cybersecurity is evolving with AI-driven threat detection, zero-trust models, and quantum encryption. Ransomware attacks and supply chain vulnerabilities remain key risks. Organizations prioritize cloud security and regulatory compliance to combat emerging cyber threats.', 'resource', '/uploads/cyber_trends.png', 3, '2025-03-17 16:00:00'),
+(5, 'Artificial Intelligence Breakthroughs', 'AI is advancing fast with breakthroughs in generative models, robotics, and autonomous systems. GPT models, AI-driven healthcare, and self-learning algorithms are revolutionizing industries. Ethical AI and regulations are key focuses as AI shapes the future of technology. ', 'resource', '/uploads/ai.jpg', 4, '2025-03-17 16:10:00'),
+(6, 'Gaming Industry Updates', 'The gaming industry is evolving rapidly with new releases, AI-driven innovations, and cloud gaming expansions. Companies like Sony, Microsoft, and Tencent push boundaries, while indie studios thrive. Esports and VR continue to grow, shaping the future of interactive entertainment', 'resource', '/uploads/gaming_news.jpg', 5, '2025-03-17 16:20:00'),
+(7, 'Health and Wellness Tips', 'Prioritize sleep, stay hydrated, eat nutritious foods, and exercise regularly. Manage stress with mindfulness and deep breathing. Maintain social connections and take breaks for mental well-being. Small, consistent habits lead to a healthier, happier life! ', 'resource', '/uploads/well_tips.jpg', 2, '2025-03-17 16:30:00'),
+(8, 'Space Exploration', 'Space exploration pushes the boundaries of human knowledge, leading to technological advancements and deeper understanding of the universe. From the Moon landing to Mars rovers and deep-space probes, it fuels innovation, inspires curiosity, and shapes the future of humanity', 'resource', '/uploads/space.jpg', 1, '2025-03-17 16:40:00'),
+(12, 'myu favourite anime', 'this is my fav', 'resource', '/uploads/attachments-1743641114489-29234548.jpg', 1, '2025-04-03 00:45:14'),
+(14, 'Englsnf', '234', 'discussion', '/uploads/attachments-1743682934484-99440974.png', 1, '2025-04-03 12:22:14'),
+(15, 'amazon', 'this is amazon', 'resource', '/uploads/attachments-1743688445888-147011289.jpg', 1, '2025-04-03 13:54:06');
 
 -- --------------------------------------------------------
 
@@ -116,6 +138,14 @@ ALTER TABLE `Comments`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Indexes for table `Messages`
+--
+ALTER TABLE `Messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sender_id` (`sender_id`),
+  ADD KEY `receiver_id` (`receiver_id`);
+
+--
 -- Indexes for table `Posts`
 --
 ALTER TABLE `Posts`
@@ -137,13 +167,19 @@ ALTER TABLE `Users`
 -- AUTO_INCREMENT for table `Comments`
 --
 ALTER TABLE `Comments`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `Messages`
+--
+ALTER TABLE `Messages`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `Posts`
 --
 ALTER TABLE `Posts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `Users`
@@ -161,6 +197,13 @@ ALTER TABLE `Users`
 ALTER TABLE `Comments`
   ADD CONSTRAINT `Comments_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `Posts` (`id`),
   ADD CONSTRAINT `Comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `Users` (`id`);
+
+--
+-- Constraints for table `Messages`
+--
+ALTER TABLE `Messages`
+  ADD CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `Users` (`id`),
+  ADD CONSTRAINT `messages_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `Users` (`id`);
 
 --
 -- Constraints for table `Posts`
