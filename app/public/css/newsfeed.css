@@ -62,12 +62,18 @@ body {
 
 /* Top Bar Styles */
 .top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
+  position: fixed; /* Keep it fixed at the top */
+  top: 0;
+  left: 250px; /* Align with the sidebar width */
+  right: 0; /* Extend to the right edge */
+  z-index: 1000; /* Ensure it stays above other elements */
   background-color: white;
   border-bottom: 1px solid var(--border-color);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm); /* Add a subtle shadow */
 }
 
 .search-container {
@@ -291,6 +297,11 @@ button.delete-comment-button i {
 
 button.delete-comment-button:hover {
   color: #c0392b; /* Darker red on hover */
+}
+
+/* Adjust the main content to avoid overlap with the fixed top bar */
+.main-content {
+  margin-top: 70px; /* Adjust based on the height of the top bar */
 }
 
 /* Responsive Design */

@@ -109,15 +109,6 @@ html(lang="en")
             else
               p.no-posts No posts available
 
-      .groups-sidebar
-        h2.groups-title Groups
-        if groups && groups.length
-          each group in groups
-            a.group-link(href=`/group/${group._id}`)
-              i.fas.fa-users
-              | #{group.name}
-        else
-          p.no-groups No groups available
 
     script.
       // Hide the success message after 3 seconds
