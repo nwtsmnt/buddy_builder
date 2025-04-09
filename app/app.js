@@ -35,6 +35,7 @@ const editProfileRoutes = require('./routes/edit_profile_routes');
 const newsfeedRoutes = require('./routes/newsfeed_routes');
 const addPeopleRoutes = require('./routes/add_people_routes');
 const commentRoutes = require('./routes/comment_routes');
+const userRoutes = require('./routes/user_routes'); // Import the user routes
 
 // Debug middleware to help diagnose session issues (optional)
 app.use((req, res, next) => {
@@ -58,6 +59,7 @@ app.use("/newsfeed", newsfeedRoutes);
 app.use("/add-people", addPeopleRoutes);
 app.use('/add-comment', commentRoutes); // Register comment routes AFTER session setup
 app.use('/uploads', express.static('uploads'));
+app.use('/', userRoutes); // Register the user routes
 
 // Start server
 app.listen(3000, () => {

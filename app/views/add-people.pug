@@ -120,37 +120,12 @@ html(lang="en")
                 .tab Pending Requests
                 .tab Recommended
               
+              // This people-grid will be populated with users from the database
               .people-grid
-                each val in [1, 2, 3, 4, 5, 6, 7, 8]
-                  .person-card
-                    .compatibility-badge #{85 + (val % 10)}%
-                    .person-avatar
-                      img(src=`/images/default-avatar.png` alt="User")
-                    h3.person-name #{['Alex', 'Taylor', 'Jordan', 'Casey', 'Morgan', 'Riley', 'Avery', 'Sam'][val - 1]} #{['Smith', 'Johnson', 'Williams', 'Jones', 'Brown', 'Davis', 'Miller', 'Wilson'][val - 1]}
-                    p.person-major #{['Computer Science', 'Mathematics', 'Physics', 'Biology', 'English Literature', 'Chemistry', 'Psychology', 'Engineering'][val - 1]} Major
-                    
-                    ul.person-subjects
-                      each subject in [['Algorithms', 'Data Structures', 'Web Dev'], ['Calculus', 'Statistics', 'Algebra'], ['Quantum', 'Mechanics', 'Electromagnetism'], ['Genetics', 'Ecology', 'Microbiology'], ['Shakespeare', 'Poetry', 'Creative Writing'], ['Organic', 'Inorganic', 'Analytical'], ['Cognitive', 'Developmental', 'Social'], ['Mechanical', 'Electrical', 'Civil']][val - 1]
-                        li= subject
-                    
-                    .person-footer
-                      .availability
-                        i.fas.fa-clock
-                        span #{['Weekday Evenings', 'Weekends', 'Weekday Mornings', 'Afternoons', 'Flexible', 'Evenings', 'Mornings & Evenings', 'Weekends Only'][val - 1]}
-                      
-                      .person-actions
-                        if val % 3 === 0
-                          button.connect-btn.pending
-                            i.fas.fa-clock
-                            span Pending
-                        else if val % 4 === 0
-                          button.connect-btn.connected
-                            i.fas.fa-check
-                            span Connected
-                        else
-                          button.connect-btn
-                            i.fas.fa-plus
-                            span Connect
+                // Loading indicator will be shown here before users are loaded
+                .loading-indicator(style="text-align: center; padding: 30px;")
+                  i.fas.fa-spinner.fa-spin(style="font-size: 32px; color: #666;")
+                  p Loading users...
               
               .pagination
                 button.pagination-btn.prev
@@ -190,3 +165,8 @@ html(lang="en")
                       .mini-group-info
                         h5 #{['Calculus Masters', 'Python Coders', 'Chemistry Lab'][val - 1]}
                         p #{val * 8} members
+          
+          .content-area
+            ul#user-list // This is where the user list will be dynamically populated
+
+    script(src="/js/add-people.js")
