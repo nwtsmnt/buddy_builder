@@ -36,6 +36,10 @@ const newsfeedRoutes = require('./routes/newsfeed_routes');
 const addPeopleRoutes = require('./routes/add_people_routes');
 const commentRoutes = require('./routes/comment_routes');
 const userRoutes = require('./routes/user_routes'); // Import the user routes
+const connectionRoutes = require('./routes/connection_routes'); // Import connection routes
+
+// Import database models
+const connectionModel = require('./models/connection_model');
 
 // Debug middleware to help diagnose session issues (optional)
 app.use((req, res, next) => {
@@ -60,6 +64,20 @@ app.use("/add-people", addPeopleRoutes);
 app.use('/add-comment', commentRoutes); // Register comment routes AFTER session setup
 app.use('/uploads', express.static('uploads'));
 app.use('/', userRoutes); // Register the user routes
+app.use('/', connectionRoutes); // Register connection routes
+
+// Initialize database tables
+async function initDatabase() {
+    try {
+        await connectionModel.createConnectionsTable();
+        console.log('Database tables initialized');
+    } catch (error) {
+        console.error('Error initializing database tables:', error);
+    }
+}
+
+// Call the initialization function
+initDatabase();
 
 // Start server
 app.listen(3000, () => {
