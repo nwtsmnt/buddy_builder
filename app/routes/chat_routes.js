@@ -7,7 +7,8 @@ const chatController = require('../controllers/chat_controller'); // Import the 
 router.get("/", async (req, res) => {
     try {
         const userId = req.session.userId;
-        
+        const receiverId = req.query.user || null; // Get receiverId from query params
+
         // Fetch the user's data
         const userResult = await db.query("SELECT id, name, avatar_url FROM Users WHERE id = ?", [userId]);
         const user = userResult.length ? userResult[0] : null;
@@ -15,7 +16,8 @@ router.get("/", async (req, res) => {
         // Pass both user object AND userId to the template
         res.render("chat", { 
             user, 
-            userId: req.session.userId 
+            userId, 
+            receiverId // Pass receiverId to the template
         });
     } catch (error) {
         console.error("Error rendering chat page:", error);

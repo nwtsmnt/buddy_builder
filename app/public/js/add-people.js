@@ -276,8 +276,7 @@ async function loadConnections() {
         document.querySelectorAll('.message-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const userId = this.getAttribute('data-user-id');
-                // Navigate to chat page with this user
-                window.location.href = `/chat?user=${userId}`;
+                window.location.href = `/chat?user=${userId}`; // Redirect to chat page with receiverId
             });
         });
     } catch (error) {

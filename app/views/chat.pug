@@ -59,6 +59,11 @@ html(lang="en")
               button.new-chat-btn#add-conversation-btn
                 i.fas.fa-plus
 
+              // Add a search bar for finding users
+              div#user-search-container.hidden
+                input#user-search-input(type="text" placeholder="Search for users...")
+                ul#user-search-results
+
             .conversation-list
               ul#conversation-list
 
@@ -111,7 +116,104 @@ html(lang="en")
           input#user-search-input(type="text" placeholder="Search for users...")
           ul#user-search-results
 
+script(src="/socket.io/socket.io.js")
 script.
+  // Dynamically determine the WebSocket server URL
+  const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+  const wsHost = window.location.hostname; // Use the current hostname
+  const wsPort = 8080; // WebSocket server port
+  const ws = new WebSocket(`${wsProtocol}://${wsHost}:${wsPort}`); // Connect to the WebSocket server
+
+  // Get the logged-in user ID from the hidden input
+  const loggedInUserId = document.getElementById('logged-in-user-id').value;
+
+  // Register the user with the WebSocket server
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ type: 'register', userId: loggedInUserId }));
+    console.log('WebSocket connection established');
+  };
+
+  // Handle incoming messages
+  ws.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data);
+
+      if (data.type === 'newMessage') {
+        const messagesContainer = document.querySelector('.messages-container');
+        const messageElement = document.createElement('div');
+        const isSent = data.senderId === loggedInUserId;
+
+        messageElement.classList.add('message', isSent ? 'sent' : 'received');
+        messageElement.innerHTML = `
+          <div class="message-avatar">
+            <img src="${data.senderAvatar || '/images/default-avatar.png'}" alt="Avatar">
+          </div>
+          <div class="message-content">
+            <div class="message-bubble">${data.message}</div>
+            <div class="message-time">${new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+          </div>
+        `;
+
+        messagesContainer.appendChild(messageElement);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+    } catch (error) {
+      console.error('Error handling incoming message:', error);
+    }
+  };
+
+  // Send a real-time message
+  async function sendMessage() {
+    const messageInput = document.querySelector('.message-input');
+    const message = messageInput.value.trim();
+    if (!message) return;
+
+    const activeConversation = document.querySelector('.conversation-item.active');
+    if (!activeConversation) {
+      alert('Please select a conversation first');
+      return;
+    }
+
+    const receiverId = activeConversation.dataset.userId;
+
+    // Send the message to the WebSocket server
+    ws.send(
+      JSON.stringify({
+        type: 'sendMessage',
+        receiverId,
+        message,
+      })
+    );
+
+    // Display the message locally
+    const messagesContainer = document.querySelector('.messages-container');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', 'sent');
+    messageElement.innerHTML = `
+      <div class="message-avatar">
+        <img src="/images/default-avatar.png" alt="Avatar">
+      </div>
+      <div class="message-content">
+        <div class="message-bubble">${message}</div>
+        <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+      </div>
+    `;
+
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    // Clear the input field
+    messageInput.value = '';
+  }
+
+  document.querySelector('.send-btn').addEventListener('click', sendMessage);
+  document.querySelector('.message-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
   // Add this function at the beginning of your script block
   function updateContactHeader(userName, userAvatar) {
     const contactName = document.querySelector('.contact-name');
@@ -229,144 +331,6 @@ script.
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  async function sendMessage() {
-    const messageInput = document.querySelector('.message-input');
-    const message = messageInput.value.trim();
-    if (!message) return; // Do nothing if the message is empty
-
-    // Get the active conversation
-    const activeConversation = document.querySelector('.conversation-item.active');
-    if (!activeConversation) {
-      alert('Please select a conversation first');
-      return;
-    }
-
-    const receiverId = activeConversation.dataset.userId;
-
-    try {
-      // Send the message to the backend
-      const response = await fetch('/chat/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          receiverId,
-          message,
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to send message');
-
-      // Get the newly created message from the backend
-      const newMessage = await response.json();
-
-      // Clear the input field
-      messageInput.value = '';
-
-      // Append the new message to the chat interface
-      const messagesContainer = document.querySelector('.messages-container');
-      const messageElement = document.createElement('div');
-      const isSent = true; // Since this is the sender, the message is always "sent"
-
-      messageElement.classList.add('message', 'sent');
-      messageElement.innerHTML = `
-        <div class="message-avatar">
-          <img src="${newMessage.sender_avatar || '/images/default-avatar.png'}" alt="Avatar">
-        </div>
-        <div class="message-content">
-          <div class="message-bubble">${newMessage.message}</div>
-          <div class="message-time">${formatTime(new Date(newMessage.created_at))}</div>
-        </div>
-      `;
-
-      messagesContainer.appendChild(messageElement);
-
-      // Scroll to the bottom of the messages container
-      messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-      // Update the conversation preview in the sidebar
-      const previewEl = activeConversation.querySelector('.conversation-preview');
-      if (previewEl) {
-        previewEl.textContent = message.length > 25 ? message.substring(0, 25) + '...' : message;
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      alert('Failed to send message. Please try again.');
-    }
-  }
-
-  // Hook up send button click event
-  document.querySelector('.send-btn').addEventListener('click', sendMessage);
-
-  // Add 'Enter' key support for the message input
-  document.querySelector('.message-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-
-  const loggedInUserId = !{JSON.stringify(userId)}; // Replace `userId` with the logged-in user's ID from the server
-
-  document.getElementById('add-conversation-btn').addEventListener('click', () => {
-    const modal = document.getElementById('add-conversation-modal');
-    modal.classList.toggle('hidden'); // Show or hide the modal
-  });
-
-  document.getElementById('user-search-input').addEventListener('input', async (event) => {
-    const query = event.target.value.trim();
-    if (!query) {
-      document.getElementById('user-search-results').innerHTML = '';
-      return;
-    }
-
-    try {
-      console.log(`Searching for users matching: "${query}"`);
-      const response = await fetch(`/chat/search-users?query=${encodeURIComponent(query)}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Search failed with status: ${response.status}`);
-      }
-      
-      const users = await response.json();
-      console.log('Search results:', users);
-
-      const resultsList = document.getElementById('user-search-results');
-      resultsList.innerHTML = '';
-
-      if (users.length === 0) {
-        resultsList.innerHTML = '<li class="no-results">No users found</li>';
-        return;
-      }
-
-      users.forEach(user => {
-        const li = document.createElement('li');
-        li.classList.add('user-search-item');
-        li.dataset.userId = user.id;
-        li.innerHTML = `
-          <div class="user-avatar">
-            <img src="${user.avatar_url || '/images/default-avatar.png'}" alt="${user.name}">
-          </div>
-          <div class="user-info">
-            <div class="user-name">${user.name}</div>
-          </div>
-        `;
-        li.addEventListener('click', () => startConversation(user.id, user.name, user.avatar_url));
-        resultsList.appendChild(li);
-      });
-    } catch (error) {
-      console.error('Error searching users:', error);
-      document.getElementById('user-search-results').innerHTML = 
-        '<li class="error">Error searching for users</li>';
-    }
-  });
-
   async function startConversation(userId, userName, userAvatar) {
     try {
       const response = await fetch('/chat/start-conversation', {
@@ -439,6 +403,64 @@ script.
       alert('Failed to start conversation. Please try again.');
     }
   }
+
+  document.getElementById('add-conversation-btn').addEventListener('click', () => {
+    const modal = document.getElementById('add-conversation-modal');
+    modal.classList.toggle('hidden'); // Show or hide the modal
+  });
+
+  document.getElementById('user-search-input').addEventListener('input', async (event) => {
+    const query = event.target.value.trim();
+    if (!query) {
+      document.getElementById('user-search-results').innerHTML = '';
+      return;
+    }
+
+    try {
+      console.log(`Searching for users matching: "${query}"`);
+      const response = await fetch(`/chat/search-users?query=${encodeURIComponent(query)}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Search failed with status: ${response.status}`);
+      }
+      
+      const users = await response.json();
+      console.log('Search results:', users);
+
+      const resultsList = document.getElementById('user-search-results');
+      resultsList.innerHTML = '';
+
+      if (users.length === 0) {
+        resultsList.innerHTML = '<li class="no-results">No users found</li>';
+        return;
+      }
+
+      users.forEach(user => {
+        const li = document.createElement('li');
+        li.classList.add('user-search-item');
+        li.dataset.userId = user.id;
+        li.innerHTML = `
+          <div class="user-avatar">
+            <img src="${user.avatar_url || '/images/default-avatar.png'}" alt="${user.name}">
+          </div>
+          <div class="user-info">
+            <div class="user-name">${user.name}</div>
+          </div>
+        `;
+        li.addEventListener('click', () => startConversation(user.id, user.name, user.avatar_url));
+        resultsList.appendChild(li);
+      });
+    } catch (error) {
+      console.error('Error searching users:', error);
+      document.getElementById('user-search-results').innerHTML = 
+        '<li class="error">Error searching for users</li>';
+    }
+  });
 
   // Load conversations on page load
   loadConversations();

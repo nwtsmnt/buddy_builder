@@ -1,20 +1,22 @@
-# Base image to use
-FROM node:latest
+# Use the official Node.js image as the base image
+FROM node:16
 
-# set a working directory
-WORKDIR /src
+# Set the working directory inside the container
+WORKDIR /app
 
-# Copy across project configuration information
-# Install application dependencies
-COPY package*.json /src/
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# Ask npm to install the dependencies
-RUN npm install -g supervisor && npm install && npm install supervisor
+# Install dependencies, including globally installing concurrently
+RUN npm install && npm install -g concurrently
 
-# Copy across all our files
-COPY . /src
+# Copy the rest of the application code to the working directory
+COPY . .
 
-# Expose our application port (3000)
-EXPOSE 3000
+# Expose the application port and WebSocket server port
+EXPOSE 3000 8080
+
+# Start both the application and the WebSocket server
+CMD ["npm", "run", "start:all"]
 
 
