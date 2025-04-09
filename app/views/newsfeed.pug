@@ -93,7 +93,7 @@ html(lang="en")
                   .post-footer
                     form.comment-form(action="/add-comment" method="POST")
                       input(type="hidden" name="post_id" value=post.id)
-                      textarea(name="comment" placeholder="Add a comment..." required)
+                      textarea.comment-box(name="comment" placeholder="Add a comment..." required)
                       button.comment-button(type="submit")
                         i.fas.fa-comment
                         | Comment
@@ -104,6 +104,8 @@ html(lang="en")
                           li.comment-item
                             b #{c.fullname}:
                             | #{c.comment}
+                            button.delete-comment-button(data-comment-id=c.id)
+                              i.fas.fa-trash
             else
               p.no-posts No posts available
 
@@ -161,3 +163,4 @@ html(lang="en")
           }, 3000);
         }
       });
+    script(src="/js/newsfeed.js")

@@ -34,3 +34,31 @@ exports.addComment = async (req, res) => {
         res.status(500).send('An error occurred while adding the comment.');
     }
 };
+
+// Delete a comment
+exports.deleteComment = async (req, res) => {
+    try {
+        const commentId = req.params.id;
+        const userId = req.session.userId;
+        
+        if (!userId) {
+            return res.status(401).send({ message: 'You must be logged in to delete a comment.' });
+        }
+
+        // Check if the comment belongs to the logged-in user
+        const comment = await db.query('SELECT * FROM Comments WHERE id = ? AND user_id = ?', [commentId, userId]);
+        if (comment.length === 0) {
+            return res.status(403).send({ message: 'You are not authorized to delete this comment.' });
+        }
+
+        // Delete the comment
+        const result = await db.query('DELETE FROM Comments WHERE id = ?', [commentId]);
+        if (result.affectedRows === 0) {
+            return res.status(404).send({ message: 'Comment not found.' });
+        }
+        res.status(200).send({ message: 'Comment deleted successfully.' });
+    } catch (err) {
+        console.error('Error deleting comment:', err.message);
+        res.status(500).send({ message: 'An error occurred while deleting the comment.' });
+    }
+};

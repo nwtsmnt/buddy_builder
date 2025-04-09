@@ -260,6 +260,39 @@ body {
   font-weight: bold;
 }
 
+/* Restrict the size of the comment box */
+textarea.comment-box {
+  width: 300px; /* Fixed width */
+  height: 50px; /* Fixed height */
+  resize: none; /* Disable resizing */
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Style the delete button */
+button.delete-comment-button {
+  background: none;
+  border: none;
+  color: var(--danger-color);
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+button.delete-comment-button i {
+  pointer-events: none; /* Prevent icon from blocking button click */
+}
+
+button.delete-comment-button:hover {
+  color: #c0392b; /* Darker red on hover */
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .app-container {
