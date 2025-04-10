@@ -41,9 +41,6 @@ html(lang="en")
 
       .main-content
         header.top-bar
-          .search-container
-            i.fas.fa-search
-            input.search-input(type="text" placeholder="Search conversations...")
           .user-menu
             .profile-menu
               if user && user.avatar_url
@@ -55,7 +52,7 @@ html(lang="en")
         .chat-content
           .chat-sidebar
             .chat-sidebar-header
-              h3 Conversations
+              h3 
               button.new-chat-btn#add-conversation-btn
                 i.fas.fa-plus
 
@@ -72,15 +69,10 @@ html(lang="en")
               .chat-contact
                 img.contact-avatar(src="/images/default-avatar.png" alt="Contact")
                 .contact-info
-                  .contact-name Contact Name
-                  .contact-status
-                    span.status-dot.online
-                    | Online
+                  .contact-name Chat
               .chat-actions
                 button.action-btn
                   i.fas.fa-phone
-                button.action-btn
-                  i.fas.fa-video
                 button.action-btn
                   i.fas.fa-ellipsis-v
 
@@ -88,11 +80,7 @@ html(lang="en")
               // Messages will be dynamically populated here
 
             .message-composer
-              button.attachment-btn
-                i.fas.fa-paperclip
               textarea.message-input(placeholder="Type a message...")
-              button.emoji-btn
-                i.fas.fa-smile
               button.send-btn
                 i.fas.fa-paper-plane
 
@@ -264,7 +252,7 @@ script.
     } catch (error) {
       console.error('Error loading conversations:', error);
       document.getElementById('conversation-list').innerHTML = 
-        '<li class="error">Failed to load conversations</li>';
+        '<li class="error"></li>';
     }
   }
 

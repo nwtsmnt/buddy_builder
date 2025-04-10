@@ -132,41 +132,11 @@ html(lang="en")
                   i.fas.fa-chevron-left
                 .pagination-pages
                   .page-number.active 1
-                  .page-number 2
-                  .page-number 3
                 button.pagination-btn.next
                   i.fas.fa-chevron-right
-            
-            .recommendations-sidebar
-              .rec-header
-                h3 Perfect Matches
-                button.refresh-btn
-                  i.fas.fa-sync-alt
-              
-              .perfect-matches
-                each val in [1, 2, 3, 4]
-                  .match-item
-                    .match-avatar
-                      img(src="/images/default-avatar.png" alt="Match")
-                      .match-percentage 95%
-                    .match-info
-                      h4 #{['Emma', 'Noah', 'Olivia', 'Liam'][val - 1]} #{['Garcia', 'Martinez', 'Rodriguez', 'Lee'][val - 1]}
-                      p #{['Same classes as you!', 'Similar study habits', 'Complementary skills', 'Near your location'][val - 1]}
-                    button.quick-connect
-                      i.fas.fa-plus
-              
-              .rec-section
-                h4 Study Groups You May Like
-                .mini-group-list
-                  each val in [1, 2, 3]
-                    .mini-group
-                      .mini-group-icon
-                        i.fas.fa-users
-                      .mini-group-info
-                        h5 #{['Calculus Masters', 'Python Coders', 'Chemistry Lab'][val - 1]}
-                        p #{val * 8} members
+          
           
           .content-area
-            ul#user-list // This is where the user list will be dynamically populated
+            ul#user-list 
 
     script(src="/js/add-people.js")
