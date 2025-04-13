@@ -1,3 +1,11 @@
+Sprint 4 Backlog
+
+    [X] Polish all pages, make all buttons work
+    [X] Host
+    [X] Add SSL cetificate (to make HTTPS)
+    [X] Present
+
+
 Sprint 3 Backlog
 
 High Priority
@@ -40,26 +48,26 @@ Low Priority
 ## High Priority
 Sprint 2: 
 - [X] Set up routing using Express.js for different pages
-- [ ] Create an SQL database schema with tables for users and sessions
-- [ ] Implement connection between Express.js and the SQL database
-- [ ] Serve static HTML files with Express.js
+- [x] Create an SQL database schema with tables for users and sessions
+- [x] Implement connection between Express.js and the SQL database
+- [X] Serve static HTML files with Express.js
 Sprint 1:
 - [x] Homepage: Create main structure and navigation
 - [x] Log-in Page: User authentication system
 - [x] Register Page: Form validation and database storage
 
 ## Medium Priority
-- [ ] Integrate form data submission with database storage
-- [ ] Create API endpoints for user authentication and registration
-- [ ]  Implement database queries for user login and validation
+- [X] Integrate form data submission with database storage
+- [X] Create API endpoints for user authentication and registration
+- [X]  Implement database queries for user login and validation
 
-- [ ] Password Reset Functionality
-- [ ] User Profile Page
+- [X] Password Reset Functionality
+- [X] User Profile Page
 
 ## Low Priority
-- [ ] Optimize SQL queries for performance
-- [ ] Add error handling for database connections
-- [ ] Implement security best practices for SQL connections
+- [X] Optimize SQL queries for performance
+- [X] Add error handling for database connections
+- [X] Implement security best practices for SQL connections
 
-- [ ] Optimize website load speed
-- [ ] Add animations for better UX
+- [X] Optimize website load speed
+- [X] Add animations for better UX
